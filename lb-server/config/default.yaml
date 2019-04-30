@@ -1,0 +1,18 @@
+app:
+  home: build/static
+  port: 3000
+  url: localhost
+debug: false
+logger:
+  level: info
+  silent: false
+  levels:
+    error: 0
+    warn: 1
+    info: 2
+    verbose: 3
+    debug: 4
+    silly: 5
+graphql:
+  introspection: true
+
