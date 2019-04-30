@@ -1,0 +1,53 @@
+{
+  "name": "@deboxsoft/lb-server",
+  "version": "1.0.0",
+  "description": "server service lovebird application.",
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https:://github.com/deboxsoft/lovebird"
+  },
+  "keywords": [
+    "lovebird",
+    "node",
+    "graphql"
+  ],
+  "author": "Nurdiansyah",
+  "scripts": {
+    "start:dev": "cross-env NODE_ENV=development ts-node-dev src/index.ts",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@deboxsoft/babel-preset-devel": "^2.0.8",
+    "@deboxsoft/devel": "^2.1.4",
+    "@deboxsoft/devel-typescript": "^0.0.14",
+    "@deboxsoft/eslint-config-devel": "^1.0.11",
+    "@types/config": "^0.0.34",
+    "@types/graphql": "^14.2.0",
+    "@types/node": "^10.0.0",
+    "fb-watchman": "^2.0.0",
+    "jest": "^24.7.1",
+    "ts-node": "^8.1.0",
+    "ts-node-dev": "^1.0.0-pre.32"
+  },
+  "dependencies": {
+    "@deboxsoft/config": "^1.0.5",
+    "@deboxsoft/graphql": "^0.0.15",
+    "@deboxsoft/lb-farm-model": "link:../lb-farm-model",
+    "@deboxsoft/lb-farm-service": "link:../lb-farm-service",
+    "apollo-errors": "^1.9.0",
+    "apollo-resolvers": "^1.4.1",
+    "apollo-server-env": "^2.2.0",
+    "apollo-server-koa": "^2.5.0-alpha.6",
+    "boom": "^7.3.0",
+    "config": "^3.1.0",
+    "debox-logger": "^1.0.0-rc.1",
+    "graphql": "^14.2.1",
+    "koa": "^2.7.0",
+    "koa-bodyparser": "^4.2.1",
+    "koa-router": "^7.4.0",
+    "koa-static": "^5.0.0",
+    "lodash": "^4.17.11",
+    "winston": "^3.2.1"
+  }
+}
