@@ -1,0 +1,7 @@
+{
+  "extends": ["@deboxsoft/devel/typescript"],
+  "rules": {
+    "@typescript-eslint/no-non-null-assertion": 0,
+    "no-use-before-define": 0
+  }
+}
