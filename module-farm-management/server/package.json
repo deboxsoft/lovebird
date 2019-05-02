@@ -27,9 +27,9 @@
   ],
   "author": "Nurdiansyah",
   "dependencies": {
-    "@deboxsoft/graphql": "^0.0.22",
+    "@deboxsoft/graphql": "^0.0.24",
     "@deboxsoft/logger": "^1.0.1",
-    "@deboxsoft/typeorm": "^0.2.21-beta.1",
+    "@deboxsoft/typeorm": "^0.2.21-beta.2",
     "@deboxsoft/user-model": "^0.0.1",
     "dataloader": "^1.4.0",
     "fast-memoize": "^2.5.1",
@@ -41,6 +41,7 @@
   "devDependencies": {
     "@babel/core": "^7.4.3",
     "@babel/polyfill": "^7.2.5",
+    "@deboxsoft/babel-preset-devel": "^2.0.8",
     "@deboxsoft/config": "^1.0.5",
     "@deboxsoft/devel": "^2.1.4",
     "@deboxsoft/devel-typescript": "^0.0.14",

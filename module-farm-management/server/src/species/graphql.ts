@@ -90,7 +90,9 @@ export const resolver = {
   types: {
     Species: {
       birds(species: SpeciesInterface, args: ConnectionArguments, { birdManager }: Context) {
-        return paginate(args, pagination => birdManager.findBirdBySpecies(species.id, pagination));
+        return paginate(args, pagination => birdManager.findBirdBySpecies(species.id, pagination), {
+          type: 'Species'
+        });
       }
     }
   },
@@ -98,8 +100,8 @@ export const resolver = {
     species(root: null, { id }: { id: SpeciesID }, { birdManager }: Context) {
       return birdManager.getSpecies(id);
     },
-    listSpecies(root: null, args, { birdManager }: Context) {
-      return birdManager.findSpecies();
+    listSpecies(root: null, args: null, { birdManager }: Context) {
+      return birdManager.listSpecies();
     }
   },
   mutation: {

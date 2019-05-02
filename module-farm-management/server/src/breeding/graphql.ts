@@ -62,6 +62,11 @@ const BreedingConnection = connectionDefinitions({
   nodeType: name
 });
 
+const BreedingRecordConnection = connectionDefinitions({
+  name,
+  nodeType: name
+});
+
 export const typeDef = `
   type Breeding {
     name: String
@@ -70,7 +75,15 @@ export const typeDef = `
     records${connectionArgs()}: BreedingRecordConnection
   }
   
+   type BreedingRecord {
+    id: ID
+    ring: String
+    message: String
+    createdAt: TimeStamp
+  }
+  
   ${BreedingConnection}
+  ${BreedingRecordConnection}
   ${create.typeDef}
   ${update.typeDef}
   ${remove.typeDef}
@@ -92,13 +105,15 @@ export const resolver = {
   types: {
     Breeding: {
       records(breeding: Breeding, args: ConnectionArguments, { breedingManager }: Context) {
-        return paginate(args, pagination => breedingManager.getRecordBreeding(breeding.id, pagination));
+        return paginate(args, pagination => breedingManager.getRecord(breeding.id, pagination), {
+          type: 'BreedingRecord'
+        });
       }
     }
   },
   query: {
     breeding(root: null, { id }: { id: BreedingID }, { breedingManager }: Context) {
-      return breedingManager.getBreeding(id);
+      throw new Error('not implementation');
     }
   },
   mutation: {

@@ -1,8 +1,8 @@
 import { Ring } from '../bird/types';
 import { FarmID } from '../farm/types';
-import { MateRecordID } from '../../../lb-farm-model/src/model';
 
 export type MateID = string;
+export type MateRecordID = string;
 export interface MateInput {
   maleRing: Ring;
   femaleRing: Ring;

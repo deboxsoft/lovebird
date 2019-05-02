@@ -91,13 +91,15 @@ export const resolver = {
   types: {
     Farm: {
       birds(farm: Farm, args: ConnectionArguments, { birdManager }: Context) {
-        return paginate(args, pagination => birdManager.findBirdByFarm(farm.id, pagination));
+        return paginate(args, pagination => birdManager.findBirdByFarm(farm.id, pagination), {
+          type: 'Farm'
+        });
       }
     }
   },
   query: {
     farm(root: null, { id }: { id: FarmID }, { farmManager }: Context) {
-      return farmManager.getFarm(id);
+      throw new Error('not Implementation');
     }
   },
   mutation: {

@@ -64,6 +64,11 @@ const MateConnection = connectionDefinitions({
   nodeType: name
 });
 
+const MateRecordConnection = connectionDefinitions({
+  name,
+  nodeType: name
+});
+
 export const typeDef = `
   type Mate {
     id: ID!
@@ -77,7 +82,15 @@ export const typeDef = `
     records${connectionArgs()}: MateRecord
   }
   
+   type MateRecord {
+    id: ID
+    ring: String
+    message: String
+    createdAt: TimeStamp
+  }
+  
   ${MateConnection}
+  ${MateRecordConnection}
   ${register.typeDef}
   ${change.typeDef}
   ${remove.typeDef}
@@ -99,16 +112,18 @@ export const resolver = {
   types: {
     Mate: {
       chills(mate: Mate, args: ConnectionArguments, { birdManager }: Context) {
-        return paginate(args, pagination => birdManager.findBirdByMate(mate.id, pagination));
+        return paginate(args, pagination => birdManager.findBirdByMate(mate.id, pagination), {
+          type: 'Bird'
+        });
       },
       records(mate: Mate, args: ConnectionArguments, { farmManager }: Context) {
-        return paginate(args, pagination => farmManager.getRecordMate(mate.id, pagination));
+        return paginate(args, pagination => farmManager.getRecordMate(mate.id, pagination), { type: 'Bird' });
       }
     }
   },
   query: {
     mate(root: null, { id }: { id: MateID }, { farmManager }: Context) {
-      return farmManager.getMate(id);
+      return farmManager.findMateById(id);
     }
   },
   mutation: {

@@ -82,12 +82,12 @@ const createBirdRecord = mutationDefinition<Context>({
   }
 });
 
-const BirdRecordConnection = connectionDefinitions({
+const BirdConnection = connectionDefinitions({
   name,
   nodeType: name
 });
 
-const BirdConnection = connectionDefinitions({
+const BirdRecordConnection = connectionDefinitions({
   name,
   nodeType: name
 });
@@ -120,16 +120,16 @@ export const typeDef = `
     id: ID
     ring: String
     message: String
-    timeRecord: TimeStamp
+    createdAt: TimeStamp
   }
   
   ${BirdConnection}
+  ${BirdRecordConnection}
   ${register.typeDef}
   ${update.typeDef}
   ${remove.typeDef}
   ${removes.typeDef}
   ${createBirdRecord.typeDef}
-  ${BirdRecordConnection}
 `;
 
 export const queryDef = `
@@ -159,23 +159,31 @@ export const resolver = {
         }
       });
     },
+
     Bird: {
       records(bird: Bird, args: ConnectionArguments, { birdManager }: Context) {
-        return paginate(args, pagination => birdManager.getRecordBird(bird.ring));
+        return paginate(args, pagination => birdManager.getRecord(bird.ring), {
+          idName: 'ring',
+          type: 'Bird'
+        });
       }
     }
   },
+
   query: {
     checkRing(root: null, { ring }: { ring: Ring }, { birdManager }: Context) {
       return birdManager.checkRing(ring);
     },
+
     bird(root: null, { ring }: { ring: Ring }, { birdManager }: Context) {
       return birdManager.checkRing(ring);
     },
-    birdRecord(root: null, { ring }: { ring: Ring }, { birdManager }: Context) {
-      return birdManager.getRecordBird(ring);
+
+    birdRecord(root: null, args: { ring: Ring } & ConnectionArguments, { birdManager }: Context) {
+      return paginate(args, pagination => birdManager.getRecord(args.ring), { type: 'BirdRecord' });
     }
   },
+
   mutation: {
     registerBird: register.resolver,
     updateBird: update.resolver,
