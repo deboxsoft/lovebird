@@ -7,7 +7,7 @@ import {
 import DataLoader from 'dataloader';
 import { Bird, BirdRecord } from './entities';
 import { Ring, BirdInput } from './types';
-import { CreateEntityFailed, UpdateEntityFailed, RemoveEntityFailed } from '../error';
+import { CreateEntityFailed, UpdateEntityFailed, RemoveEntityFailed, DataNotFound } from '../error';
 import { FarmID } from '../farm';
 import { MateID } from '../mate';
 import { SpeciesID } from '../species';
@@ -27,6 +27,10 @@ export class BirdRepo extends AbstractRepository<Bird> {
       .catch(reason => {
         throw new CreateEntityFailed('Bird', reason);
       });
+  }
+
+  save(bird: Bird): Promise<Bird> {
+    return this.repository.save(bird);
   }
 
   update(id: Ring, input: BirdInput): Promise<Bird> {
@@ -164,5 +168,14 @@ export class BirdRepo extends AbstractRepository<Bird> {
 
   getDataLoaderId(): DataLoader<string, Bird | undefined> {
     return this.dataLoaderId;
+  }
+
+  async addPhoto(ring: Ring, photo: string): Promise<Bird> {
+    const bird = await this.findByRing(ring);
+    if (!bird) {
+      throw new DataNotFound('Bird', ring);
+    }
+    bird.photo.push('photo');
+    return this.save(bird);
   }
 }
