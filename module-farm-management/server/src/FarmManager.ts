@@ -1,18 +1,15 @@
-import { Connection, Pagination } from '@deboxsoft/typeorm';
+import { Context } from './__definition';
+import { Pagination } from '@deboxsoft/typeorm';
 import { Farm, FarmID, FarmInput, FarmRepo } from './farm';
-import { Mate, MateID, MateInput, MateRepo, MateRecord } from './mate';
-
-interface Args {
-  connection: Connection;
-}
+import { Mate, MateID, MateInput, MateRepo, MateRecord, MateRecordInput } from './mate';
 
 export class FarmManager {
   farmRepo: FarmRepo;
   mateRepo: MateRepo;
 
-  constructor(args: Args) {
-    this.farmRepo = args.connection.getCustomRepository(FarmRepo);
-    this.mateRepo = args.connection.getCustomRepository(MateRepo);
+  constructor(context: Context) {
+    this.farmRepo = context.connection.getCustomRepository(FarmRepo);
+    this.mateRepo = context.connection.getCustomRepository(MateRepo);
   }
 
   async createFarm(input: FarmInput): Promise<Farm> {
@@ -23,7 +20,7 @@ export class FarmManager {
     return this.farmRepo.update(id, attributes);
   }
 
-  removeFarm(id: FarmID | FarmID[]): Promise<number> {
+  removeFarm(id: FarmID | FarmID[]): Promise<FarmID[]> {
     return this.farmRepo.remove(id);
   }
 
@@ -35,12 +32,12 @@ export class FarmManager {
     return this.mateRepo.update(mateId, attributes);
   }
 
-  removeMate(mateId: MateID | MateID[]): Promise<number> {
+  removeMate(mateId: MateID | MateID[]): Promise<MateID[]> {
     return this.mateRepo.remove(mateId);
   }
 
-  addRecordMate(mateId: MateID, message: string): Promise<MateRecord> {
-    return this.mateRepo.addRecord(mateId, message);
+  addRecordMate(input: MateRecordInput): Promise<MateRecord> {
+    return this.mateRepo.addRecord(input);
   }
 
   findFarmById(id: FarmID): Promise<Farm | undefined> {
@@ -67,9 +64,5 @@ export class FarmManager {
     const data = this.mateRepo.getRecord(mateId, pagination);
     const total = this.mateRepo.countRecord(mateId);
     return Promise.all([data, total]);
-  }
-
-  recordMate(mateId, message: string): Promise<MateRecord> {
-    return this.mateRepo.addRecord(mateId, message);
   }
 }

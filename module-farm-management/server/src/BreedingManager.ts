@@ -1,15 +1,19 @@
-import { Connection, Pagination } from '@deboxsoft/typeorm';
-import { Breeding, BreedingRecord, BreedingInput, BreedingRepo, BreedingID } from './breeding';
-
-interface Args {
-  connection: Connection;
-}
+import { Context } from './__definition';
+import { Pagination } from '@deboxsoft/typeorm';
+import {
+  Breeding,
+  BreedingRecord,
+  BreedingInput,
+  BreedingRepo,
+  BreedingID,
+  BreedingRecordInput
+} from './breeding';
 
 export class BreedingManager {
   breedingRepo: BreedingRepo;
 
-  constructor(args: Args) {
-    this.breedingRepo = args.connection.getCustomRepository(BreedingRepo);
+  constructor(context: Context) {
+    this.breedingRepo = context.connection.getCustomRepository(BreedingRepo);
   }
 
   createBreeding(input: BreedingInput): Promise<Breeding> {
@@ -20,12 +24,12 @@ export class BreedingManager {
     return this.breedingRepo.update(id, input);
   }
 
-  removeBreeding(id: BreedingID): Promise<number> {
+  removeBreeding(id: BreedingID): Promise<BreedingID[]> {
     return this.breedingRepo.remove(id);
   }
 
-  addRecordBreeding(breedingId: BreedingID, message: string): Promise<BreedingRecord> {
-    return this.breedingRepo.addRecord(breedingId, message);
+  addRecordBreeding(input: BreedingRecordInput): Promise<BreedingRecord> {
+    return this.breedingRepo.addRecord(input);
   }
 
   findBreedingByFarm(farmId, pagination?: Pagination): Promise<[Breeding[], number]> {

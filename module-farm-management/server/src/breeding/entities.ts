@@ -9,7 +9,7 @@ import {
   Index,
   BeforeInsert
 } from '@deboxsoft/typeorm';
-import { BaseModel } from '@deboxsoft/typeorm/model/BaseModel';
+import { BaseModel } from '../BaseModel';
 import {
   BreedingRecordID,
   BreedingID,
@@ -22,19 +22,18 @@ import { FarmID } from '../farm/types';
 import { Farm } from '../farm/entities';
 
 @Entity()
-@Index(['createAt', 'farmId'])
+@Index(['farm', 'createdAt'])
 export class Breeding extends BaseModel {
   @PrimaryColumn()
   id: BreedingID;
 
+  @BeforeInsert()
+  _generateId() {
+    this.id = nanoId();
+  }
+
   @Column()
   name: string;
-
-  @OneToMany(type => BreedingRecord, breedingRecord => breedingRecord.breedingId)
-  records: BreedingRecord[];
-
-  @RelationId((breeding: Breeding) => breeding.records)
-  recordsId: BreedingRecordID[];
 
   @ManyToOne(type => Farm)
   farm: Farm;
@@ -42,10 +41,8 @@ export class Breeding extends BaseModel {
   @RelationId((breeding: Breeding) => breeding.farm)
   farmId: FarmID;
 
-  @BeforeInsert()
-  _generateId() {
-    this.id = nanoId();
-  }
+  @OneToMany(type => BreedingRecord, breedingRecord => breedingRecord.breeding)
+  records: BreedingRecord[];
 
   constructor(props?: BreedingAttributes) {
     super();
@@ -55,7 +52,7 @@ export class Breeding extends BaseModel {
     }
   }
 
-  fromJson(json: BreedingInput) {
+  fromJson(json: Partial<BreedingInput>) {
     json.farmId && (this.farmId = json.farmId);
     json.name && (this.name = json.name);
   }
@@ -65,6 +62,11 @@ export class Breeding extends BaseModel {
 export class BreedingRecord extends BaseModel {
   @PrimaryColumn()
   id: BreedingRecordID;
+
+  @BeforeInsert()
+  _generateId() {
+    this.id = nanoId();
+  }
 
   @Column()
   message: string;
@@ -78,11 +80,6 @@ export class BreedingRecord extends BaseModel {
   @RelationId((breedingRecord: BreedingRecord) => breedingRecord.breeding)
   breedingId: BreedingID;
 
-  @BeforeInsert()
-  _generateId() {
-    this.id = nanoId();
-  }
-
   constructor(props?: BreedingRecordAttributes) {
     super();
     if (props) {
@@ -91,7 +88,7 @@ export class BreedingRecord extends BaseModel {
     }
   }
 
-  fromJson(json: BreedingRecordInput) {
+  fromJson(json: Partial<BreedingRecordInput>) {
     json.message && (this.message = json.message);
     json.breedingId && (this.breedingId = json.breedingId);
   }

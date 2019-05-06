@@ -8,10 +8,15 @@ import {
 import { Context } from '../__definition';
 import { MateID } from './types';
 import { Mate } from './entities';
+import { BirdManager } from '../BirdManager';
+
+const createContextBirdManager = (context: Context) => {
+  context.birdManager = new BirdManager(context);
+};
 
 const name = 'Mate';
 
-const register = mutationDefinition<Context>({
+const register = mutationDefinition({
   modelName: name,
   verb: 'register',
   inputFields: `
@@ -19,12 +24,13 @@ const register = mutationDefinition<Context>({
     femaleRing: String!
     farmId: String!
   `,
-  mutateAndGetPayload<Context>({ input }, { farmManager }) {
-    return farmManager.registerMate(input);
+  mutateAndGetPayload({ input }, context: Context) {
+    createContextBirdManager(context);
+    return context.farmManager.registerMate(input);
   }
 });
 
-const change = mutationDefinition<Context>({
+const change = mutationDefinition({
   modelName: name,
   verb: 'change',
   inputFields: `
@@ -32,36 +38,39 @@ const change = mutationDefinition<Context>({
     maleRing: String!
     femaleRing: String!
   `,
-  mutateAndGetPayload<Context>({ input }, { farmManager }) {
-    return farmManager.changeMate(input.id, input);
+  mutateAndGetPayload({ input }, context: Context) {
+    createContextBirdManager(context);
+    return context.farmManager.changeMate(input.id, input);
   }
 });
 
-const remove = mutationDefinition<Context>({
+const remove = mutationDefinition({
   modelName: name,
   verb: 'remove',
   inputFields: `
     id: ID!
   `,
-  mutateAndGetPayload<Context>({ input }, { farmManager }) {
-    return farmManager.removeMate(input.id);
+  mutateAndGetPayload({ input }, context: Context) {
+    createContextBirdManager(context);
+    return context.farmManager.removeMate(input.id);
   }
 });
 
-const removes = mutationDefinition<Context>({
+const removes = mutationDefinition({
   modelName: name,
   verb: 'removeList',
   inputFields: `
     id: ID!
   `,
-  mutateAndGetPayload<Context>({ input }, { farmManager }) {
-    return farmManager.removeMate(input.id);
+  mutateAndGetPayload({ input }, context: Context) {
+    createContextBirdManager(context);
+    return context.farmManager.removeMate(input.id);
   }
 });
 
 const MateConnection = connectionDefinitions({
-  name,
-  nodeType: name
+  name: 'MateRecord',
+  nodeType: 'MateRecord'
 });
 
 const MateRecordConnection = connectionDefinitions({
@@ -109,24 +118,25 @@ export const mutationDef = `
 `;
 
 export const resolver = {
-  types: {
-    Mate: {
-      chills(mate: Mate, args: ConnectionArguments, { birdManager }: Context) {
-        return paginate(args, pagination => birdManager.findBirdByMate(mate.id, pagination), {
-          type: 'Bird'
-        });
-      },
-      records(mate: Mate, args: ConnectionArguments, { farmManager }: Context) {
-        return paginate(args, pagination => farmManager.getRecordMate(mate.id, pagination), { type: 'Bird' });
-      }
+  Mate: {
+    chills(mate: Mate, args: ConnectionArguments, context: Context) {
+      return paginate(args, pagination => context.birdManager.findBirdByMate(mate.id, pagination), {
+        type: 'Bird'
+      });
+    },
+    records(mate: Mate, args: ConnectionArguments, context: Context) {
+      return paginate(args, pagination => context.farmManager.getRecordMate(mate.id, pagination), {
+        type: 'Bird'
+      });
     }
   },
-  query: {
-    mate(root: null, { id }: { id: MateID }, { farmManager }: Context) {
-      return farmManager.findMateById(id);
+  Query: {
+    mate(root: null, { id }: { id: MateID }, context: Context) {
+      createContextBirdManager(context);
+      return context.farmManager.findMateById(id);
     }
   },
-  mutation: {
+  Mutation: {
     registerMate: register.resolver,
     changeMate: change.resolver,
     removeMate: remove.resolver,

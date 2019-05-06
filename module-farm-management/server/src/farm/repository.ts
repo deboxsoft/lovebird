@@ -7,61 +7,52 @@ import {
 import DataLoader from 'dataloader';
 import { Farm } from './entities';
 import { FarmID, FarmInput } from './types';
-import { CreateEntityFailed, UpdateEntityFailed, RemoveEntityFailed } from '../error';
+import { CreateEntityFailed, UpdateEntityFailed, RemoveEntityFailed, DataNotFound } from '../error';
 
-@EntityRepository()
+@EntityRepository(Farm)
 export class FarmRepo extends AbstractRepository<Farm> {
   dataLoaderId: DataLoader<FarmID, Farm | undefined>;
 
   create(input: FarmInput): Promise<Farm> {
-    const executeQuery = this.createQueryBuilder('farm')
-      .insert()
-      .values(input)
-      .execute();
-
-    return executeQuery
-      .then(result => result.raw && new Farm(result.raw))
-      .catch(reason => {
-        throw new CreateEntityFailed('Farm', reason);
-      });
+    const farm = this.repository.create();
+    farm.fromJson(input);
+    return this.repository.save(farm).catch(reason => {
+      throw new CreateEntityFailed('Farm', reason);
+    });
   }
 
-  update(id: FarmID, input: FarmInput): Promise<Farm> {
-    const executeQuery = this.createQueryBuilder('farm')
-      .update()
-      .set(input)
-      .where('id = :id', { id })
-      .execute();
+  async update(id: FarmID, input: FarmInput): Promise<Farm> {
+    const farm = await this.findById(id);
 
-    return executeQuery
-      .then(result => result.raw && new Farm(result.raw))
-      .catch(reason => {
-        throw new UpdateEntityFailed(id, 'Farm', reason);
-      });
+    farm.fromJson(input);
+    return this.repository.save(farm).catch(reason => {
+      throw new UpdateEntityFailed(id, 'Farm', reason);
+    });
   }
 
-  remove(id: FarmID | FarmID[]): Promise<number> {
-    const executeQuery = this.createQueryBuilder('farm')
-      .delete()
-      .andWhereInIds(id)
-      .execute();
-
-    return executeQuery
-      .then(result => {
-        if (result.affected) {
-          return result.affected;
-        }
-        throw new RemoveEntityFailed(id, 'Farm');
-      })
+  async remove(id: FarmID | FarmID[]): Promise<FarmID[]> {
+    const farm = await this.findInIds(id);
+    return this.repository
+      .remove(farm)
+      .then(rows => rows.map(row => row.id))
       .catch(reason => {
         throw new RemoveEntityFailed(id, 'Farm', reason);
       });
   }
 
-  findById(id: FarmID): Promise<Farm | undefined> {
+  findInIds(ids: FarmID | FarmID[]): Promise<Farm[]> {
     return this.createQueryBuilder()
+      .whereInIds(ids)
+      .getMany();
+  }
+
+  async findById(id: FarmID): Promise<Farm> {
+    const farm = await this.createQueryBuilder()
       .where('id = := id', { id })
       .getOne();
+
+    if (!farm) throw new DataNotFound('Farm', id);
+    return farm;
   }
 
   findByUser(userId: string, pagination?: Pagination): Promise<Farm[]> {
@@ -87,10 +78,7 @@ export class FarmRepo extends AbstractRepository<Farm> {
 
   createDataLoaderId() {
     this.dataLoaderId = new DataLoader(ids =>
-      this.createQueryBuilder()
-        .whereInIds(ids)
-        .getMany()
-        .then(data => ids.map(id => data.find(farm => farm.id === id)))
+      this.findInIds(ids).then(data => ids.map(id => data.find(farm => farm.id === id)))
     );
   }
 

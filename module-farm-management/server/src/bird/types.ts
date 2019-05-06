@@ -28,9 +28,9 @@ export interface BirdAttributes extends RegisterBirdInput {
 export interface BirdRecordInput {
   message: string;
   ring: Ring;
-  timeRecord: number;
 }
 
 export interface BirdRecordAttributes extends BirdRecordInput {
   id: BirdRecordID;
+  timeRecord: number;
 }

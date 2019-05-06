@@ -7,55 +7,49 @@ import {
 import DataLoader from 'dataloader';
 import { Species } from './entities';
 import { SpeciesID, SpeciesInput } from './types';
-import { CreateEntityFailed, UpdateEntityFailed, RemoveEntityFailed } from '../error';
+import { CreateEntityFailed, UpdateEntityFailed, RemoveEntityFailed, DataNotFound } from '../error';
 
-@EntityRepository()
+@EntityRepository(Species)
 export class SpeciesRepo extends AbstractRepository<Species> {
   dataLoaderId: DataLoader<SpeciesID, Species | undefined>;
 
-  create(input: SpeciesInput) {
-    const executeQuery = this.createQueryBuilder('species')
-      .insert()
-      .values(input)
-      .execute();
-
-    return executeQuery
-      .then(result => result.raw && new Species(result.raw))
-      .catch(reason => {
-        throw new CreateEntityFailed('Species', reason);
-      });
+  create(input: SpeciesInput): Promise<Species> {
+    const species = this.repository.create();
+    species.fromJson(input);
+    return this.repository.save(species).catch(reason => {
+      throw new CreateEntityFailed('Species', reason);
+    });
   }
 
-  update(id: SpeciesID, input: SpeciesInput) {
-    const executeQuery = this.createQueryBuilder('species')
-      .update()
-      .set(input)
-      .where('id = :id', { id })
-      .execute();
-
-    return executeQuery
-      .then(result => result.raw && new Species(result.raw))
-      .catch(reason => {
-        throw new UpdateEntityFailed(id, 'Species', reason);
-      });
+  async update(id: SpeciesID, input: SpeciesInput): Promise<Species> {
+    const species = await this.findById(id);
+    if (!species) throw new DataNotFound('Species', id);
+    species.fromJson(input);
+    return this.repository.save(species).catch(reason => {
+      throw new UpdateEntityFailed(id, 'Species', reason);
+    });
   }
 
-  remove(id: SpeciesID | SpeciesID[]) {
-    const executeQuery = this.createQueryBuilder('species')
-      .delete()
-      .andWhereInIds(id)
-      .execute();
-
-    return executeQuery
-      .then(result => {
-        if (result.affected) {
-          return result.affected;
-        }
-        throw new RemoveEntityFailed(id, 'Species');
-      })
+  async remove(id: SpeciesID | SpeciesID[]): Promise<SpeciesID[]> {
+    const species = await this.findInIds(id);
+    return this.repository
+      .remove(species)
+      .then(rows => rows.map(row => row.id))
       .catch(reason => {
         throw new RemoveEntityFailed(id, 'Species', reason);
       });
+  }
+
+  findInIds(ids: SpeciesID | SpeciesID[]): Promise<Species[]> {
+    return this.createQueryBuilder()
+      .whereInIds(ids)
+      .getMany();
+  }
+
+  findById(id: SpeciesID) {
+    return this.createQueryBuilder()
+      .where('id = :id', { id })
+      .getOne();
   }
 
   findAll(pagination?: Pagination) {
@@ -70,18 +64,11 @@ export class SpeciesRepo extends AbstractRepository<Species> {
     return this.dataLoaderId.load(id);
   }
 
-  findById(id: SpeciesID) {
-    return this.createQueryBuilder()
-      .where('id = :id', { id })
-      .getOne();
-  }
-
   createDataLoaderId() {
     this.dataLoaderId = new DataLoader(ids =>
-      this.createQueryBuilder()
-        .whereInIds(ids)
-        .getMany()
-        .then(breedingList => ids.map(id => breedingList.find(breeding => breeding.id === id)))
+      this.findInIds(ids).then(breedingList =>
+        ids.map(id => breedingList.find(breeding => breeding.id === id))
+      )
     );
   }
 

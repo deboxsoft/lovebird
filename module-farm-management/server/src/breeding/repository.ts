@@ -6,66 +6,64 @@ import {
 } from '@deboxsoft/typeorm';
 import DataLoader from 'dataloader';
 import { Breeding, BreedingRecord } from './entities';
-import { BreedingID, BreedingInput } from './types';
-import { CreateEntityFailed, UpdateEntityFailed, RemoveEntityFailed } from '../error';
+import { BreedingID, BreedingInput, BreedingRecordInput } from './types';
+import { CreateEntityFailed, UpdateEntityFailed, RemoveEntityFailed, DataNotFound } from '../error';
 import { FarmID } from '../farm/types';
 
-@EntityRepository()
+@EntityRepository(Breeding)
 export class BreedingRepo extends AbstractRepository<Breeding> {
   dataLoaderId: DataLoader<BreedingID, Breeding | undefined>;
 
   create(input: BreedingInput): Promise<Breeding> {
-    const executeQuery = this.createQueryBuilder('breeding')
-      .insert()
-      .values(input)
-      .execute();
-
-    return executeQuery
-      .then(result => result.raw && new Breeding(result.raw))
-      .catch(reason => {
-        throw new CreateEntityFailed('Breeding', reason);
-      });
+    const breeding = this.repository.create();
+    breeding.fromJson(input);
+    return this.repository.save(breeding).catch(reason => {
+      throw new CreateEntityFailed('Breeding', reason);
+    });
   }
 
-  update(id: BreedingID, input: BreedingInput): Promise<Breeding> {
-    const executeQuery = this.createQueryBuilder('breeding')
-      .update()
-      .set(input)
-      .where('id = :id', { id })
-      .execute();
-
-    return executeQuery
-      .then(result => result.raw && new Breeding(result.raw))
-      .catch(reason => {
-        throw new UpdateEntityFailed(id, 'Breeding', reason);
-      });
+  async update(id: BreedingID, input: BreedingInput): Promise<Breeding> {
+    const breeding = await this.findById(id);
+    if (!breeding) throw new DataNotFound('Breeding', id);
+    breeding.fromJson(input);
+    return this.repository.save(breeding).catch(reason => {
+      throw new UpdateEntityFailed(id, 'Breeding', reason);
+    });
   }
 
-  remove(id: BreedingID | BreedingID): Promise<number> {
-    const executeQuery = this.createQueryBuilder('breeding')
-      .delete()
-      .andWhereInIds(id)
-      .execute();
-
-    return executeQuery
-      .then(result => {
-        if (result.affected) {
-          return result.affected;
-        }
-        throw new RemoveEntityFailed(id, 'Breeding');
-      })
+  async remove(id: BreedingID | BreedingID[]): Promise<BreedingID[]> {
+    const breeding = await this.findInIds(id);
+    return this.repository
+      .remove(breeding)
+      .then(rows => rows.map(row => row.id))
       .catch(reason => {
         throw new RemoveEntityFailed(id, 'Breeding', reason);
       });
   }
 
-  addRecord(breedingId: BreedingID, message: string): Promise<BreedingRecord> {
-    const executeQuery = this.createQueryBuilderFor(BreedingRecord)
-      .insert()
-      .values({ breedingId, message })
-      .execute();
-    return executeQuery
-      .then(result => result.raw && new BreedingRecord(result.raw))
+  findInIds(ids: BreedingID | BreedingID[]): Promise<Breeding[]> {
+    return this.createQueryBuilder()
+      .whereInIds(ids)
+      .getMany();
+  }
+
+  async findById(id: BreedingID): Promise<Breeding> {
+    const breeding = await this.createQueryBuilder()
+      .where('id = := id', { id })
+      .getOne();
+
+    if (!breeding) throw new DataNotFound('Breeding', id);
+    return breeding;
+  }
+
+  async addRecord(input: BreedingRecordInput): Promise<BreedingRecord> {
+    const breeding = await this.findById(input.breedingId);
+    const breedingRecord = this.getRepositoryFor(BreedingRecord).create();
+    breedingRecord.fromJson(input);
+    breeding.records.push(breedingRecord);
+    return this.repository
+      .save(breeding)
+      .then(() => breedingRecord)
       .catch(reason => {
         throw new CreateEntityFailed('BreedingRecord', reason);
       });
@@ -110,10 +108,9 @@ export class BreedingRepo extends AbstractRepository<Breeding> {
 
   createDataLoaderId() {
     this.dataLoaderId = new DataLoader(ids =>
-      this.createQueryBuilder()
-        .whereInIds(ids)
-        .getMany()
-        .then(breedingList => ids.map(id => breedingList.find(breeding => breeding.id === id)))
+      this.findInIds(ids).then(breedingList =>
+        ids.map(id => breedingList.find(breeding => breeding.id === id))
+      )
     );
   }
 

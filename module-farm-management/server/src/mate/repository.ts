@@ -6,75 +6,67 @@ import {
 } from '@deboxsoft/typeorm';
 import DataLoader from 'dataloader';
 import { Mate, MateRecord } from './entities';
-import { MateID, MateInput } from './types';
-import { CreateEntityFailed, UpdateEntityFailed, RemoveEntityFailed } from '../error';
+import { MateID, MateInput, MateRecordInput } from './types';
+import { CreateEntityFailed, UpdateEntityFailed, RemoveEntityFailed, DataNotFound } from '../error';
 import { FarmID } from '../farm/types';
 
-@EntityRepository()
+@EntityRepository(Mate)
 export class MateRepo extends AbstractRepository<Mate> {
   dataLoaderId: DataLoader<MateID, Mate | undefined>;
 
   create(input: MateInput): Promise<Mate> {
-    const executeQuery = this.createQueryBuilder('mate')
-      .insert()
-      .values(input)
-      .execute();
-
-    return executeQuery
-      .then(result => result.raw && new Mate(result.raw))
-      .catch(reason => {
-        throw new CreateEntityFailed('Mate', reason);
-      });
+    const mate = this.repository.create();
+    mate.fromJson(input);
+    return this.repository.save(mate).catch(reason => {
+      throw new CreateEntityFailed('Mate', reason);
+    });
   }
 
-  update(id: MateID, input: MateInput): Promise<Mate> {
-    const executeQuery = this.createQueryBuilder('mate')
-      .update()
-      .set(input)
-      .where('id = :id', { id })
-      .execute();
+  async update(id: MateID, input: MateInput): Promise<Mate> {
+    const mate = await this.findById(id);
 
-    return executeQuery
-      .then(result => result.raw && new Mate(result.raw))
-      .catch(reason => {
-        throw new UpdateEntityFailed(id, 'Mate', reason);
-      });
+    mate.fromJson(input);
+    return this.repository.save(mate).catch(reason => {
+      throw new UpdateEntityFailed(id, 'Farm', reason);
+    });
   }
 
-  remove(id: MateID | MateID[]): Promise<number> {
-    const executeQuery = this.createQueryBuilder('mate')
-      .delete()
-      .andWhereInIds(id)
-      .execute();
-
-    return executeQuery
-      .then(result => {
-        if (result.affected) {
-          return result.affected;
-        }
-        throw new RemoveEntityFailed(id, 'Mate');
-      })
+  async remove(id: MateID | MateID[]): Promise<MateID[]> {
+    const mate = await this.findInIds(id);
+    return this.repository
+      .remove(mate)
+      .then(rows => rows.map(row => row.id))
       .catch(reason => {
         throw new RemoveEntityFailed(id, 'Mate', reason);
       });
   }
 
-  addRecord(mateId: MateID, message: string): Promise<MateRecord> {
-    const executeQuery = this.createQueryBuilderFor(MateRecord)
-      .insert()
-      .values({ mateId, message })
-      .execute();
-    return executeQuery
-      .then(result => result.raw && new MateRecord(result.raw))
+  findInIds(ids: MateID | MateID[]): Promise<Mate[]> {
+    return this.createQueryBuilder()
+      .whereInIds(ids)
+      .getMany();
+  }
+
+  async findById(id: MateID): Promise<Mate> {
+    const mate = await this.createQueryBuilder()
+      .where('id = := id', { id })
+      .getOne();
+
+    if (!mate) throw new DataNotFound('Mate', id);
+    return mate;
+  }
+
+  async addRecord(input: MateRecordInput): Promise<MateRecord> {
+    const mate = await this.findById(input.mateId);
+    const mateRecord = this.getRepositoryFor(MateRecord).create();
+    mateRecord.fromJson(input);
+    mate.records.push(mateRecord);
+    return this.repository
+      .save(mate)
+      .then(() => mateRecord)
       .catch(reason => {
         throw new CreateEntityFailed('MateRecord', reason);
       });
-  }
-
-  findById(id: MateID): Promise<Mate | undefined> {
-    return this.createQueryBuilder()
-      .where('id = := id', { id })
-      .getOne();
   }
 
   findByFarm(farmId: FarmID, pagination?: Pagination): Promise<Mate[]> {

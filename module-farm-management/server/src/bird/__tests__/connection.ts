@@ -1,11 +1,14 @@
-import config from '@deboxsoft/config';
+import config from 'config';
 import { createConnection, ConnectionOptions } from '@deboxsoft/typeorm';
 import { Connection } from '@deboxsoft/typeorm/connection/Connection';
-import { Bird, Farm, Mate, MateRecord, Species } from '../../model';
+import { Bird } from '../entities';
+import { Farm } from '../../farm';
+import { Mate, MateRecord } from '../../mate';
+import { Species } from '../../species';
 
 let connection: Connection;
 
-config.set({
+process.env.NODE_CONFIG = JSON.stringify({
   db: {
     type: 'mysql',
     host: 'localhost',
@@ -20,7 +23,7 @@ config.set({
 export const getConnection = () => connection;
 
 export const start = async (): Promise<Connection> => {
-  const dbConfig = config.get<ConnectionOptions>('db');
+  const dbConfig = config.get<ConnectionOptions>('db') || {};
   if (dbConfig) {
     return createConnection(dbConfig).then(conn => {
       connection = conn;
