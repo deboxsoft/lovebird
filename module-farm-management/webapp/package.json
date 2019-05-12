@@ -1,5 +1,5 @@
 {
-  "name": "@deboxsoft/module-farm-management-client",
+  "name": "@deboxsoft/module-farm-management-webapp",
   "version": "1.0.0",
   "description": "model module farm base mobx.",
   "main": "libs/index.js",

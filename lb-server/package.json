@@ -14,13 +14,14 @@
   ],
   "author": "Nurdiansyah",
   "scripts": {
-    "start:dev": "cross-env NODE_ENV=development ts-node-dev src/index.ts",
+    "start:dev": "cross-env NODE_ENV=development ts-node-dev --respawn src/index.ts",
     "test": "jest"
   },
   "devDependencies": {
+    "@deboxsoft/babel": "^3.0.1",
     "@deboxsoft/babel-preset-devel": "^2.0.8",
-    "@deboxsoft/devel": "^2.1.4",
-    "@deboxsoft/devel-typescript": "^0.0.14",
+    "@deboxsoft/devel": "^3.0.1",
+    "@deboxsoft/devel-typescript": "^3.0.1",
     "@deboxsoft/eslint-config-devel": "^1.0.11",
     "@types/config": "^0.0.34",
     "@types/graphql": "^14.2.0",
@@ -32,9 +33,9 @@
   },
   "dependencies": {
     "@deboxsoft/config": "^1.0.5",
-    "@deboxsoft/graphql": "^0.0.15",
-    "@deboxsoft/lb-farm-model": "link:../lb-farm-model",
-    "@deboxsoft/lb-farm-service": "link:../lb-farm-service",
+    "@deboxsoft/graphql": "^0.0.29",
+    "@deboxsoft/lb-module-farm-management-server": "link:../module-farm-management/server/libs",
+    "@deboxsoft/typeorm": "^0.2.21-beta.7",
     "apollo-errors": "^1.9.0",
     "apollo-resolvers": "^1.4.1",
     "apollo-server-env": "^2.2.0",
@@ -48,6 +49,8 @@
     "koa-router": "^7.4.0",
     "koa-static": "^5.0.0",
     "lodash": "^4.17.11",
+    "lodash.merge": "^4.6.1",
+    "mariadb": "^2.0.3",
     "winston": "^3.2.1"
   }
 }

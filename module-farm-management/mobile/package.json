@@ -1,19 +1,24 @@
 {
-  "name": "@deboxsoft/module-farm-management-client",
+  "name": "@deboxsoft/module-farm-management-mobile",
   "version": "1.0.0",
   "description": "model module farm base mobx.",
   "main": "libs/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Nurdiansyah",
+  "maintainers": [
+    {
+      "name": "Nurdiansyah",
+      "email": "nur.diansyah.ckt@gmail.com"
+    }
+  ],
   "devDependencies": {
     "@babel/core": "^7.4.3",
     "@deboxsoft/babel": "^3.0.1",
     "@deboxsoft/babel-preset-devel": "^2.0.8",
     "@deboxsoft/devel": "^3.0.1",
-    "@deboxsoft/devel-react": "^3.0.1",
+    "@deboxsoft/devel-react": "^3.0.0",
     "@deboxsoft/devel-typescript": "^3.0.1",
     "@deboxsoft/eslint-config-devel": "^1.0.11",
     "@types/node": "^10.0.0",
