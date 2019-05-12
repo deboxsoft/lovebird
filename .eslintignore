@@ -1,3 +1,4 @@
-coverage
-flow
-flow-typed
+node_modules
+libs
+dist
+build
