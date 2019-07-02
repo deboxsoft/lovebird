@@ -6,28 +6,28 @@
     "moduleResolution": "node",
     "noEmit": true,
     "strict": false,
-    "isolatedModules": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "jsx": "preserve",
     "strictPropertyInitialization": false,
     "outDir": "libs",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "paths": {
+      "*": ["../node_modules/@deboxsoft/component-webapp-react/__types/*"],
+      "react/*": ["../node_modules/react/*"],
+      "react-dom/*": ["../node_modules/react-dom/*"],
+      "styled-components/*": [
+        "../node_modules/styled-components/*",
+        "../node_modules/@deboxsoft/component-webapp-react/__types/styled-components/*"
+      ],
+      "navi/*": ["../node_modules/navi/*"]
+    }
   },
-  "include": [
-    "src",
-    "types"
-  ],
-  "exclude": [
-    "__tests__",
-    "__mocks__"
-  ]
+  "include": ["src"],
+  "exclude": ["**/__tests__", "**/__mocks__"]
 }
