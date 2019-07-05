@@ -1,4 +1,4 @@
-import { Ring } from '../bird/types';
+import { Ring } from '../bird';
 
 export type FarmID = string;
 

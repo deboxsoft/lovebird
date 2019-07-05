@@ -1,4 +1,4 @@
-import { FarmID } from '../farm/types';
+import { FarmID } from '../farm';
 
 export type BreedingID = string;
 export type BreedingRecordID = string;

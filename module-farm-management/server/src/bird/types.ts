@@ -1,6 +1,6 @@
-import { FarmID } from '../farm/types';
-import { SpeciesID } from '../species/types';
-import { MateID } from '../mate/types';
+import { FarmID } from '../farm';
+import { SpeciesID } from '../species';
+import { MateID } from '../mate';
 
 export type Ring = string;
 export type BirdRecordID = string;
