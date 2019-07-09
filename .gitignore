@@ -196,5 +196,6 @@ libs
 .stylelintcache
 build
 
-/graphql.config.json
+.graphqlconfig
+schema.graphql
 dist
