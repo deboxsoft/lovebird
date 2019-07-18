@@ -1,8 +1,8 @@
 import nanoId from 'nanoid';
 import { Entity, PrimaryColumn, Column, OneToMany, Index, BeforeInsert } from '@deboxsoft/typeorm';
+import { FarmID, FarmAttributes, FarmInput } from '@deboxsoft/lb-module-farm-management-types';
 import { BaseModel } from '../BaseModel';
-import { FarmID, FarmAttributes, FarmInput } from './types';
-import { Bird } from '../bird/entities';
+import { Bird } from '../bird';
 
 @Entity()
 @Index(['createdAt', 'id'])

@@ -9,12 +9,18 @@ import {
   Index,
   BeforeInsert
 } from '@deboxsoft/typeorm';
+import {
+  MateID,
+  MateAttributes,
+  MateInput,
+  MateRecordAttributes,
+  MateRecordInput,
+  FarmID,
+  Ring
+} from '@deboxsoft/lb-module-farm-management-types';
 import { BaseModel } from '../BaseModel';
-import { MateID, MateAttributes, MateInput, MateRecordAttributes, MateRecordInput } from './types';
-import { FarmID } from '../farm/types';
-import { Ring } from '../bird/types';
-import { Bird } from '../bird/entities';
-import { Farm } from '../farm/entities';
+import { Bird } from '../bird';
+import { Farm } from '../farm';
 
 @Entity()
 @Index(['farm', 'createdAt'])

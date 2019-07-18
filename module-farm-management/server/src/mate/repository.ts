@@ -4,11 +4,10 @@ import {
   paginationSelectQueryBuilder,
   Pagination
 } from '@deboxsoft/typeorm';
+import { MateID, MateInput, MateRecordInput, FarmID } from '@deboxsoft/lb-module-farm-management-types';
 import DataLoader from 'dataloader';
 import { Mate, MateRecord } from './entities';
-import { MateID, MateInput, MateRecordInput } from './types';
 import { CreateEntityFailed, UpdateEntityFailed, RemoveEntityFailed, DataNotFound } from '../error';
-import { FarmID } from '../farm/types';
 
 @EntityRepository(Mate)
 export class MateRepo extends AbstractRepository<Mate> {

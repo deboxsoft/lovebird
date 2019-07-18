@@ -5,8 +5,8 @@ import {
   paginate,
   mutationDefinition
 } from '@deboxsoft/graphql';
+import { SpeciesID, SpeciesInterface } from '@deboxsoft/lb-module-farm-management-types';
 import { Context } from '../__definition';
-import { SpeciesID, SpeciesInterface } from './types';
 import { BirdManager } from '../BirdManager';
 
 const name = 'Species';

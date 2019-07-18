@@ -4,21 +4,25 @@ import {
   paginationSelectQueryBuilder,
   Pagination
 } from '@deboxsoft/typeorm';
+import {
+  Ring,
+  BirdInput,
+  BirdRecordInput,
+  FarmID,
+  MateID,
+  SpeciesID,
+} from '@deboxsoft/lb-module-farm-management-types';
 import DataLoader from 'dataloader';
 import { Bird, BirdRecord } from './entities';
-import { Ring, BirdInput, BirdRecordInput } from './types';
 import { CreateEntityFailed, UpdateEntityFailed, RemoveEntityFailed, DataNotFound } from '../error';
-import { FarmID } from '../farm';
-import { MateID } from '../mate';
-import { SpeciesID } from '../species';
 
 @EntityRepository(Bird)
 export class BirdRepo extends AbstractRepository<Bird> {
   dataLoaderId: DataLoader<Ring, Bird | undefined>;
 
-  create(input: BirdInput & { ring: Ring }): Promise<Bird> {
+  async create(input: BirdInput & { ring: Ring }): Promise<Bird> {
     const bird = new Bird(input);
-    return this.repository.save(bird).catch(reason => {
+    return await this.repository.save(bird).catch(reason => {
       throw new CreateEntityFailed('Bird', reason);
     });
   }

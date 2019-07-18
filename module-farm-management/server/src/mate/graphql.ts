@@ -5,8 +5,8 @@ import {
   paginate,
   mutationDefinition
 } from '@deboxsoft/graphql';
+import { MateID } from '@deboxsoft/lb-module-farm-management-types';
 import { Context } from '../__definition';
-import { MateID } from './types';
 import { Mate } from './entities';
 import { BirdManager } from '../BirdManager';
 

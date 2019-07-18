@@ -5,8 +5,8 @@ import {
   ConnectionArguments,
   mutationDefinition
 } from '@deboxsoft/graphql';
+import { BreedingID } from '@deboxsoft/lb-module-farm-management-types';
 import { Context } from '../__definition';
-import { BreedingID } from './types';
 import { Breeding } from './entities';
 import { BreedingManager } from '../BreedingManager';
 

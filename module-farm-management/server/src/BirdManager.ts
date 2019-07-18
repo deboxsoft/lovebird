@@ -1,6 +1,14 @@
 import { Pagination, Connection } from '@deboxsoft/typeorm';
-import { Ring, Bird, BirdInput, BirdRecord, BirdRepo, BirdRecordInput } from './bird';
-import { SpeciesID, Species, SpeciesRepo, SpeciesInput } from './species';
+import {
+  Ring,
+  BirdInput,
+  BirdRecordInput,
+  SpeciesID,
+  SpeciesInput,
+  BirdFilterInput
+} from '@deboxsoft/lb-module-farm-management-types';
+import { Bird, BirdRecord, BirdRepo } from './bird';
+import { Species, SpeciesRepo } from './species';
 
 export class BirdManager {
   private birdRepo: BirdRepo;
@@ -43,7 +51,7 @@ export class BirdManager {
     return this.birdRepo.findByRing(ring);
   }
 
-  findBirdByFarm(farmId, pagination): Promise<[Bird[], number]> {
+  findBirdByFarm(farmId, pagination?: Pagination): Promise<[Bird[], number]> {
     const data = this.birdRepo.findByFarm(farmId, pagination);
     const total = this.birdRepo.countByFarm(farmId);
     return Promise.all([data, total]);

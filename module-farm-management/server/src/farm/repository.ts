@@ -4,9 +4,9 @@ import {
   paginationSelectQueryBuilder,
   Pagination
 } from '@deboxsoft/typeorm';
+import { FarmID, FarmInput } from '@deboxsoft/lb-module-farm-management-types';
 import DataLoader from 'dataloader';
 import { Farm } from './entities';
-import { FarmID, FarmInput } from './types';
 import { CreateEntityFailed, UpdateEntityFailed, RemoveEntityFailed, DataNotFound } from '../error';
 
 @EntityRepository(Farm)

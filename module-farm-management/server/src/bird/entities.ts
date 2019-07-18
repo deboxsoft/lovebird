@@ -9,8 +9,6 @@ import {
   Index,
   BeforeInsert
 } from '@deboxsoft/typeorm';
-import { BaseModel } from '../BaseModel';
-import moment from 'moment';
 import {
   Ring,
   Gender,
@@ -18,14 +16,16 @@ import {
   BirdInput,
   BirdRecordID,
   BirdRecordInput,
-  BirdRecordAttributes
-} from './types';
-import { FarmID } from '../farm/types';
-import { MateID } from '../mate/types';
-import { SpeciesID } from '../species/types';
-import { Species } from '../species/entities';
-import { Farm } from '../farm/entities';
-import { Mate } from '../mate/entities';
+  BirdRecordAttributes,
+  FarmID,
+  MateID,
+  SpeciesID
+} from '@deboxsoft/lb-module-farm-management-types';
+import moment from 'moment';
+import { BaseModel } from '../BaseModel';
+import { Species } from '../species';
+import { Farm } from '../farm';
+import { Mate } from '../mate';
 
 @Entity()
 @Index(['createdAt'])

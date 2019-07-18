@@ -5,8 +5,8 @@ import {
   paginate,
   mutationDefinition
 } from '@deboxsoft/graphql';
+import { FarmID } from '@deboxsoft/lb-module-farm-management-types';
 import { Context } from '../__definition';
-import { FarmID } from './types';
 import { Farm } from './entities';
 import { FarmManager } from '../FarmManager';
 

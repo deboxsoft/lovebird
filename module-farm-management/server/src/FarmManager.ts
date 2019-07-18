@@ -1,7 +1,14 @@
-import { Context } from './__definition';
 import { Pagination } from '@deboxsoft/typeorm';
-import { Farm, FarmID, FarmInput, FarmRepo } from './farm';
-import { Mate, MateID, MateInput, MateRepo, MateRecord, MateRecordInput } from './mate';
+import {
+  FarmID,
+  FarmInput,
+  MateID,
+  MateInput,
+  MateRecordInput
+} from '@deboxsoft/lb-module-farm-management-types';
+import { Context } from './__definition';
+import { Farm, FarmRepo } from './farm';
+import { Mate, MateRepo, MateRecord } from './mate';
 
 export class FarmManager {
   farmRepo: FarmRepo;

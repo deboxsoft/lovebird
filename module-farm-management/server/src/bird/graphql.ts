@@ -6,8 +6,8 @@ import {
   ConnectionArguments,
   paginate
 } from '@deboxsoft/graphql';
+import { BirdRecordInput, Ring } from '@deboxsoft/lb-module-farm-management-types';
 import { Context } from '../__definition';
-import { BirdRecordInput, Ring } from './types';
 import { Bird } from './entities';
 import { BirdManager } from '../BirdManager';
 
@@ -123,7 +123,7 @@ export const typeDef = `
     age: Int
     birth: Int
     photo: String
-    records${connectionArgs()}: BirdRecord
+    records${connectionArgs()}: BirdRecordConnection
   }
   
   type BirdRecord {

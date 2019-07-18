@@ -9,17 +9,17 @@ import {
   Index,
   BeforeInsert
 } from '@deboxsoft/typeorm';
-import { BaseModel } from '../BaseModel';
 import {
   BreedingRecordID,
   BreedingID,
   BreedingAttributes,
   BreedingInput,
   BreedingRecordAttributes,
-  BreedingRecordInput
-} from './types';
-import { FarmID } from '../farm/types';
-import { Farm } from '../farm/entities';
+  BreedingRecordInput,
+  FarmID
+} from '@deboxsoft/lb-module-farm-management-types';
+import { BaseModel } from '../BaseModel';
+import { Farm } from '../farm';
 
 @Entity()
 @Index(['farm', 'createdAt'])

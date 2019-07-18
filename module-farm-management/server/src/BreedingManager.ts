@@ -1,13 +1,7 @@
-import { Context } from './__definition';
 import { Pagination } from '@deboxsoft/typeorm';
-import {
-  Breeding,
-  BreedingRecord,
-  BreedingInput,
-  BreedingRepo,
-  BreedingID,
-  BreedingRecordInput
-} from './breeding';
+import { BreedingInput, BreedingID, BreedingRecordInput } from '@deboxsoft/lb-module-farm-management-types';
+import { Context } from './__definition';
+import { Breeding, BreedingRecord, BreedingRepo } from './breeding';
 
 export class BreedingManager {
   breedingRepo: BreedingRepo;

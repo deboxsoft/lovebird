@@ -4,11 +4,15 @@ import {
   paginationSelectQueryBuilder,
   Pagination
 } from '@deboxsoft/typeorm';
+import {
+  BreedingID,
+  BreedingInput,
+  BreedingRecordInput,
+  FarmID
+} from '@deboxsoft/lb-module-farm-management-types';
 import DataLoader from 'dataloader';
 import { Breeding, BreedingRecord } from './entities';
-import { BreedingID, BreedingInput, BreedingRecordInput } from './types';
 import { CreateEntityFailed, UpdateEntityFailed, RemoveEntityFailed, DataNotFound } from '../error';
-import { FarmID } from '../farm/types';
 
 @EntityRepository(Breeding)
 export class BreedingRepo extends AbstractRepository<Breeding> {
