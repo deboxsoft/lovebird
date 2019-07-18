@@ -51,6 +51,10 @@ export class BirdManager {
     return this.birdRepo.findByRing(ring);
   }
 
+  findBird(filter: BirdFilterInput = {}, pagination?: Pagination) {
+    return this.birdRepo.find(filter, pagination);
+  }
+
   findBirdByFarm(farmId, pagination?: Pagination): Promise<[Bird[], number]> {
     const data = this.birdRepo.findByFarm(farmId, pagination);
     const total = this.birdRepo.countByFarm(farmId);

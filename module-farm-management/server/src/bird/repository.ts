@@ -11,6 +11,7 @@ import {
   FarmID,
   MateID,
   SpeciesID,
+  BirdFilterInput
 } from '@deboxsoft/lb-module-farm-management-types';
 import DataLoader from 'dataloader';
 import { Bird, BirdRecord } from './entities';
@@ -44,6 +45,23 @@ export class BirdRepo extends AbstractRepository<Bird> {
       .catch(reason => {
         throw new RemoveEntityFailed(rings, 'Bird', reason);
       });
+  }
+
+  find(filter: BirdFilterInput, pagination?: Pagination) {
+    const queryBuilder = this.createQueryBuilder();
+    if (pagination) {
+      paginationSelectQueryBuilder(queryBuilder, pagination, { idName: 'ring' });
+    }
+    Object.entries(filter).forEach(([key, val], index) => {
+      if (val) {
+        if (queryBuilder.expressionMap.wheres.length === 0) {
+          queryBuilder.where(`${key} = :${key}`, { [key]: val });
+        } else {
+          queryBuilder.andWhere(`${key} = :${key}`, { [key]: val });
+        }
+      }
+    });
+    return queryBuilder.getMany();
   }
 
   findInRings(rings: Ring | Ring[]): Promise<Bird[]> {

@@ -4,9 +4,15 @@ import {
   mutationDefinition,
   connectionArgs,
   ConnectionArguments,
-  paginate
+  paginate,
+  Pagination
 } from '@deboxsoft/graphql';
-import { BirdRecordInput, Ring } from '@deboxsoft/lb-module-farm-management-types';
+import {
+  BirdRecordInput,
+  Ring,
+  BirdFilterInput,
+  BirdFilterInputDef
+} from '@deboxsoft/lb-module-farm-management-types';
 import { Context } from '../__definition';
 import { Bird } from './entities';
 import { BirdManager } from '../BirdManager';
@@ -133,6 +139,10 @@ export const typeDef = `
     createdAt: TimeStamp
   }
   
+  input BirdFilterInput {
+    ${BirdFilterInputDef}
+  }
+  
   ${BirdConnection}
   ${BirdRecordConnection}
   ${register.typeDef}
@@ -144,7 +154,7 @@ export const typeDef = `
 
 export const queryDef = `
   checkRing(ring: Ring!): Bird
-  bird(ring: Ring!): Bird
+  findBird(filter: BirdFilterInput, pagination: PaginationInput): [Bird]
   birdRecord(ring: Ring!): [BirdRecord]
 `;
 
@@ -184,9 +194,9 @@ export const resolver = {
       return context.birdManager.checkRing(ring);
     },
 
-    bird(root: null, { ring }: { ring: Ring }, context: Context) {
+    findBird(root: null, input: { filter: BirdFilterInput; pagination?: Pagination }, context: Context) {
       createContextBirdManager(context);
-      return context.birdManager.checkRing(ring);
+      return context.birdManager.findBird(input.filter, input.pagination);
     },
 
     birdRecord(root: null, args: { ring: Ring } & ConnectionArguments, context: Context) {
