@@ -4,12 +4,11 @@ import {
   PrimaryColumn,
   Column,
   RelationId,
+  OneToMany,
   ManyToOne,
   Index,
   BeforeInsert
 } from '@deboxsoft/typeorm';
-import { BaseModel } from '@deboxsoft/typeorm/model/BaseModel';
-import moment from 'moment';
 import {
   Ring,
   Gender,
@@ -17,18 +16,19 @@ import {
   BirdInput,
   BirdRecordID,
   BirdRecordInput,
-  BirdRecordAttributes
-} from './types';
-import { FarmID } from '../farm/types';
-import { MateID } from '../mate/types';
-import { SpeciesID } from '../species/types';
-
-import { Species } from '../species/entities';
-import { Farm } from '../farm/entities';
-import { Mate } from '../mate/entities';
+  BirdRecordAttributes,
+  FarmID,
+  MateID,
+  SpeciesID
+} from '@deboxsoft/lb-module-farm-management-types';
+import moment from 'moment';
+import { BaseModel } from '../BaseModel';
+import { Species } from '../species';
+import { Farm } from '../farm';
+import { Mate } from '../mate';
 
 @Entity()
-@Index(['createAt'])
+@Index(['createdAt'])
 export class Bird extends BaseModel {
   @PrimaryColumn()
   ring: Ring;
@@ -74,6 +74,9 @@ export class Bird extends BaseModel {
   @RelationId((bird: Bird) => bird.farm)
   farmId: FarmID;
 
+  @OneToMany(type => BirdRecord, birdRecord => birdRecord.bird)
+  records: BirdRecord[];
+
   constructor(props?: BirdAttributes) {
     super();
     if (props) {
@@ -82,7 +85,7 @@ export class Bird extends BaseModel {
     }
   }
 
-  fromJson(json: BirdInput) {
+  fromJson(json: Partial<BirdInput>) {
     json.name && (this.name = json.name);
     json.gender && (this.gender = json.gender);
     json.colorMutation && (this.colorMutation = json.colorMutation);
@@ -115,6 +118,11 @@ export class BirdRecord extends BaseModel {
   @PrimaryColumn()
   id: BirdRecordID;
 
+  @BeforeInsert()
+  _generateId() {
+    this.id = nanoId();
+  }
+
   @Column()
   message: string;
 
@@ -127,11 +135,6 @@ export class BirdRecord extends BaseModel {
   @RelationId((birdRecord: BirdRecord) => birdRecord.bird)
   ring: Ring;
 
-  @BeforeInsert()
-  _generateId() {
-    this.id = nanoId();
-  }
-
   constructor(props?: BirdRecordAttributes) {
     super();
     if (props) {
@@ -141,7 +144,7 @@ export class BirdRecord extends BaseModel {
     }
   }
 
-  fromJson(json: BirdRecordInput) {
+  fromJson(json: Partial<BirdRecordInput>) {
     json.ring && (this.ring = json.ring);
     json.message && (this.message = json.message);
   }

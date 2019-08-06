@@ -5,59 +5,73 @@ import {
   ConnectionArguments,
   mutationDefinition
 } from '@deboxsoft/graphql';
+import { BreedingID } from '@deboxsoft/lb-module-farm-management-types';
 import { Context } from '../__definition';
-import { BreedingID } from './types';
 import { Breeding } from './entities';
+import { BreedingManager } from '../BreedingManager';
 
 const name = 'Breeding';
 
-const create = mutationDefinition<Context>({
+const createContextBreedingManager = (context: Context) => {
+  context.breedingManager = new BreedingManager(context);
+};
+
+const create = mutationDefinition({
   modelName: name,
   verb: 'create',
   inputFields: `
     name: String!
     farmId: ID!
   `,
-  mutateAndGetPayload<Context>({ input }, { breedingManager }) {
-    return breedingManager.createBreeding(input);
+  mutateAndGetPayload({ input }, context: Context) {
+    createContextBreedingManager(context);
+    return context.breedingManager.createBreeding(input);
   }
 });
 
-const update = mutationDefinition<Context>({
+const update = mutationDefinition({
   modelName: name,
   verb: 'update',
   inputFields: `
     id: ID!
     name: String!
   `,
-  mutateAndGetPayload<Context>({ input }, { breedingManager }) {
-    return breedingManager.updateBreeding(input.id, input);
+  mutateAndGetPayload({ input }, context: Context) {
+    createContextBreedingManager(context);
+    return context.breedingManager.updateBreeding(input.id, input);
   }
 });
 
-const remove = mutationDefinition<Context>({
+const remove = mutationDefinition({
   modelName: name,
   verb: 'remove',
   inputFields: `
     id: ID!
   `,
-  mutateAndGetPayload<Context>({ input }, { breedingManager }) {
-    return breedingManager.removeBreeding(input.id);
+  mutateAndGetPayload({ input }, context: Context) {
+    createContextBreedingManager(context);
+    return context.breedingManager.removeBreeding(input.id);
   }
 });
 
-const removes = mutationDefinition<Context>({
+const removes = mutationDefinition({
   modelName: name,
   verb: 'removeList',
   inputFields: `
     id: ID!
   `,
-  mutateAndGetPayload<Context>({ input }, { breedingManager }) {
-    return breedingManager.removeBreeding(input.id);
+  mutateAndGetPayload({ input }, context: Context) {
+    createContextBreedingManager(context);
+    return context.breedingManager.removeBreeding(input.id);
   }
 });
 
 const BreedingConnection = connectionDefinitions({
+  name: 'BreedingRecord',
+  nodeType: 'BreedingRecord'
+});
+
+const BreedingRecordConnection = connectionDefinitions({
   name,
   nodeType: name
 });
@@ -70,7 +84,15 @@ export const typeDef = `
     records${connectionArgs()}: BreedingRecordConnection
   }
   
+   type BreedingRecord {
+    id: ID
+    ring: String
+    message: String
+    createdAt: TimeStamp
+  }
+  
   ${BreedingConnection}
+  ${BreedingRecordConnection}
   ${create.typeDef}
   ${update.typeDef}
   ${remove.typeDef}
@@ -89,19 +111,20 @@ export const mutationDef = `
 `;
 
 export const resolver = {
-  types: {
-    Breeding: {
-      records(breeding: Breeding, args: ConnectionArguments, { breedingManager }: Context) {
-        return paginate(args, pagination => breedingManager.getRecordBreeding(breeding.id, pagination));
-      }
+  Breeding: {
+    records(breeding: Breeding, args: ConnectionArguments, context: Context) {
+      return paginate(args, pagination => context.breedingManager.getRecord(breeding.id, pagination), {
+        type: 'BreedingRecord'
+      });
     }
   },
-  query: {
-    breeding(root: null, { id }: { id: BreedingID }, { breedingManager }: Context) {
-      return breedingManager.getBreeding(id);
+  Query: {
+    breeding(root: null, { id }: { id: BreedingID }, context: Context) {
+      createContextBreedingManager(context);
+      throw new Error('not implementation');
     }
   },
-  mutation: {
+  Mutation: {
     createBreeding: create.resolver,
     updateBreeding: update.resolver,
     removeBreeding: remove.resolver,

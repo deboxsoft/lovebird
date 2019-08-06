@@ -1,3 +1,4 @@
+import {} from 'lodash';
 import { typeDef, queryDef, mutationDef, resolver } from './graphql';
 
 export * from './types';

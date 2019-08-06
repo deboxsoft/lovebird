@@ -1,17 +1,22 @@
-import { Connection, Pagination } from '@deboxsoft/typeorm';
-import { Ring, Bird, BirdInput, BirdRecord, BirdRepo } from './bird';
-import { SpeciesID, Species, SpeciesRepo, SpeciesInput } from './species';
-
-interface Args {
-  connection: Connection;
-}
+import { Pagination, Connection } from '@deboxsoft/typeorm';
+import {
+  Ring,
+  BirdInput,
+  BirdRecordInput,
+  SpeciesID,
+  SpeciesInput,
+  BirdFilterInput
+} from '@deboxsoft/lb-module-farm-management-types';
+import { Bird, BirdRecord, BirdRepo } from './bird';
+import { Species, SpeciesRepo } from './species';
 
 export class BirdManager {
   private birdRepo: BirdRepo;
   private speciesRepo: SpeciesRepo;
-  constructor(args: Args) {
-    this.birdRepo = args.connection.getCustomRepository(BirdRepo);
-    this.speciesRepo = args.connection.getCustomRepository(SpeciesRepo);
+
+  constructor({ connection }: { connection: Connection }) {
+    this.birdRepo = connection.getCustomRepository(BirdRepo);
+    this.speciesRepo = connection.getCustomRepository(SpeciesRepo);
   }
 
   registerBird(ring: string, input: BirdInput): Promise<Bird> {
@@ -22,7 +27,7 @@ export class BirdManager {
     return this.birdRepo.update(ring, attributes);
   }
 
-  removeBird(ring: string | Ring[]): Promise<number> {
+  removeBird(ring: string | Ring[]): Promise<Ring[]> {
     return this.birdRepo.remove(ring);
   }
 
@@ -34,19 +39,23 @@ export class BirdManager {
     return this.speciesRepo.update(id, attributes);
   }
 
-  removeSpecies(id: SpeciesID | SpeciesID[]): Promise<number> {
+  removeSpecies(id: SpeciesID | SpeciesID[]): Promise<SpeciesID[]> {
     return this.speciesRepo.remove(id);
   }
 
-  addRecordBird(ring: string, message: string): Promise<BirdRecord> {
-    return this.birdRepo.addRecord(ring, message);
+  addRecordBird(input: BirdRecordInput): Promise<BirdRecord> {
+    return this.birdRepo.addRecord(input);
   }
 
   public checkRing(ring: Ring) {
     return this.birdRepo.findByRing(ring);
   }
 
-  findBirdByFarm(farmId, pagination): Promise<[Bird[], number]> {
+  findBird(filter: BirdFilterInput = {}, pagination?: Pagination) {
+    return this.birdRepo.find(filter, pagination);
+  }
+
+  findBirdByFarm(farmId, pagination?: Pagination): Promise<[Bird[], number]> {
     const data = this.birdRepo.findByFarm(farmId, pagination);
     const total = this.birdRepo.countByFarm(farmId);
     return Promise.all([data, total]);

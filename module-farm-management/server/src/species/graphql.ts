@@ -5,53 +5,62 @@ import {
   paginate,
   mutationDefinition
 } from '@deboxsoft/graphql';
+import { SpeciesID, SpeciesInterface } from '@deboxsoft/lb-module-farm-management-types';
 import { Context } from '../__definition';
-import { SpeciesID, SpeciesInterface } from './types';
+import { BirdManager } from '../BirdManager';
 
 const name = 'Species';
 
-const create = mutationDefinition<Context>({
+const createContextBirdManager = (context: Context) => {
+  context.birdManager = new BirdManager(context);
+};
+
+const create = mutationDefinition({
   modelName: name,
   verb: 'create',
   inputFields: `
-    name: String
+    name: String!
   `,
-  mutateAndGetPayload<Context>({ input }, { birdManager }) {
-    return birdManager.createSpecies(input);
+  mutateAndGetPayload({ input }, context: Context) {
+    createContextBirdManager(context);
+    return context.birdManager.createSpecies(input);
   }
 });
 
-const update = mutationDefinition<Context>({
+const update = mutationDefinition({
   modelName: name,
   verb: 'update',
   inputFields: `
     id: ID!
     name: String
   `,
-  mutateAndGetPayload<Context>({ input }, { birdManager }) {
-    return birdManager.updateSpecies(input.id, input);
+  mutateAndGetPayload({ input }, context: Context) {
+    createContextBirdManager(context);
+    return context.birdManager.updateSpecies(input.id, input);
   }
 });
 
-const remove = mutationDefinition<Context>({
+const remove = mutationDefinition({
   modelName: name,
   verb: 'remove',
   inputFields: `
     id: ID!
   `,
-  mutateAndGetPayload<Context>({ input }, { birdManager }) {
-    return birdManager.removeSpecies(input.id);
+  mutateAndGetPayload({ input }, context: Context) {
+    createContextBirdManager(context);
+    return context.birdManager.removeSpecies(input.id);
   }
 });
 
-const removes = mutationDefinition<Context>({
+const removes = mutationDefinition({
   modelName: name,
   verb: 'removeList',
   inputFields: `
     id: ID!
   `,
-  mutateAndGetPayload<Context>({ input }, { birdManager }) {
-    return birdManager.removeSpecies(input.id);
+  mutateAndGetPayload<Context>({ input }, context) {
+    createContextBirdManager(context);
+    return context.birdManager.removeSpecies(input.id);
   }
 });
 
@@ -64,7 +73,7 @@ export const typeDef = `
   type Species {
     id: ID
     name: String
-    birds${connectionArgs(['speciesId: ID!'])}: BirdConnection
+    birds${connectionArgs()}: BirdConnection
   }
   
   ${SpeciesConnection}
@@ -87,22 +96,25 @@ export const mutationDef = `
 `;
 
 export const resolver = {
-  types: {
-    Species: {
-      birds(species: SpeciesInterface, args: ConnectionArguments, { birdManager }: Context) {
-        return paginate(args, pagination => birdManager.findBirdBySpecies(species.id, pagination));
-      }
+  Species: {
+    birds(species: SpeciesInterface, args: ConnectionArguments, context: Context) {
+      return paginate(args, pagination => context.birdManager.findBirdBySpecies(species.id, pagination), {
+        type: 'Species',
+        idName: 'ring'
+      });
     }
   },
-  query: {
-    species(root: null, { id }: { id: SpeciesID }, { birdManager }: Context) {
-      return birdManager.getSpecies(id);
+  Query: {
+    species(root: null, { id }: { id: SpeciesID }, context: Context) {
+      createContextBirdManager(context);
+      return context.birdManager.getSpecies(id);
     },
-    listSpecies(root: null, args, { birdManager }: Context) {
-      return birdManager.findSpecies();
+    listSpecies(root: null, args: null, context: Context) {
+      createContextBirdManager(context);
+      return context.birdManager.listSpecies();
     }
   },
-  mutation: {
+  Mutation: {
     createSpecies: create.resolver,
     updateSpecies: update.resolver,
     removeSpecies: remove.resolver,

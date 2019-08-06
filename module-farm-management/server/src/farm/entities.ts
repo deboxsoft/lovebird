@@ -1,37 +1,25 @@
 import nanoId from 'nanoid';
-import {
-  Entity,
-  PrimaryColumn,
-  Column,
-  RelationId,
-  OneToMany,
-  Index,
-  BeforeInsert
-} from '@deboxsoft/typeorm';
-import { BaseModel } from '@deboxsoft/typeorm/model/BaseModel';
-import { FarmID, FarmAttributes, FarmInput } from './types';
-import { Ring } from '../bird/types';
-import { Bird } from '../bird/entities';
+import { Entity, PrimaryColumn, Column, OneToMany, Index, BeforeInsert } from '@deboxsoft/typeorm';
+import { FarmID, FarmAttributes, FarmInput } from '@deboxsoft/lb-module-farm-management-types';
+import { BaseModel } from '../BaseModel';
+import { Bird } from '../bird';
 
 @Entity()
-@Index(['createAt', ''])
+@Index(['createdAt', 'id'])
 export class Farm extends BaseModel {
   @PrimaryColumn()
   id: FarmID;
+
+  @BeforeInsert()
+  _generateId() {
+    this.id = nanoId();
+  }
 
   @Column()
   name: string;
 
   @OneToMany(type => Bird, bird => bird.farm)
   birds: Bird[];
-
-  @RelationId((farm: Farm) => farm.birds)
-  rings: Ring[];
-
-  @BeforeInsert()
-  _generateId() {
-    this.id = nanoId();
-  }
 
   constructor(props?: FarmAttributes) {
     super();
@@ -41,7 +29,7 @@ export class Farm extends BaseModel {
     }
   }
 
-  fromJson(json: FarmInput) {
+  fromJson(json: Partial<FarmInput>) {
     json.name && (this.name = json.name);
   }
 }

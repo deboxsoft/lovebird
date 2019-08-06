@@ -1,16 +1,11 @@
 {
   "compilerOptions": {
-    "paths": {
-      "*": [
-        "types/*"
-      ]
-    },
-    "baseUrl": "./src",
     "target": "es5",
     "module": "commonjs",
     "declaration": true,
     "moduleResolution": "node",
     "isolatedModules": false,
+    "jsx": "preserve",
     "strictNullChecks": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -22,7 +17,7 @@
     "noUnusedLocals": true,
     "downlevelIteration": true,
     "outDir": "libs",
-    "lib": ["es6", "es7"]
+    "lib": ["es6", "es7", "dom"]
   },
   "include": [
     "src"

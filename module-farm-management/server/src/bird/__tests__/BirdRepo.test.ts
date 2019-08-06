@@ -1,5 +1,5 @@
-import * as moment from 'moment';
-import { BirdRepo } from '../BirdRepo';
+import moment from 'moment';
+import { BirdRepo } from '../repository';
 import { start, stop, getConnection } from './connection';
 
 const getBirdRepo = async (): Promise<BirdRepo> => await getConnection().getCustomRepository(BirdRepo);
@@ -16,7 +16,7 @@ describe('BirdRepo', () => {
   it('cek instance BirdRepo dpt instance tanpa error', async () => {
     const bird = await getConnection()
       .getCustomRepository(BirdRepo)
-      .createAndSave({
+      .create({
         ring: 'ring1',
         name: 'name',
         colorMutation: 'biola',
@@ -32,12 +32,13 @@ describe('BirdRepo', () => {
 
   it('cek age', async () => {
     const birdRepo = await getBirdRepo();
-    const bird = await birdRepo.findOne('ring1');
-    const { birth } = bird;
+    const bird = await birdRepo.findByRing('ring1');
+
+    if (!bird) throw new Error('error');
     bird.age = 1;
     const _bird = await birdRepo.save(bird);
     expect(_bird.age).toBe(_bird.age);
-    expect(_bird.birth).not.toEqual(birth);
+    expect(_bird.birth).not.toEqual(bird.birth);
     expect(bird).toEqual(_bird);
   });
 
@@ -50,10 +51,12 @@ describe('BirdRepo', () => {
 
   it('cek remove bird', async () => {
     const birdRepo = await getBirdRepo();
-    let bird = await birdRepo.findOne('ring1');
-    const _bird = await birdRepo.remove(bird);
+    let bird = await birdRepo.findByRing('ring1');
+
+    if (!bird) throw new Error('error');
+    const _bird = await birdRepo.remove(bird.ring);
     expect(bird).toBe(_bird);
-    bird = await birdRepo.findOne('ring1');
+    bird = await birdRepo.findByRing('ring1');
     expect(bird).toBeUndefined();
   });
 });

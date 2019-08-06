@@ -1,0 +1,1 @@
+export { useRegisterBird } from './register';

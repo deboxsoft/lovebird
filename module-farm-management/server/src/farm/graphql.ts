@@ -5,56 +5,65 @@ import {
   paginate,
   mutationDefinition
 } from '@deboxsoft/graphql';
+import { FarmID } from '@deboxsoft/lb-module-farm-management-types';
 import { Context } from '../__definition';
-import { FarmID } from './types';
 import { Farm } from './entities';
+import { FarmManager } from '../FarmManager';
+
+const createContextFarmManager = (context: Context) => {
+  context.farmManager = new FarmManager(context);
+};
 
 const name = 'Farm';
 
-const create = mutationDefinition<Context>({
+const create = mutationDefinition({
   modelName: name,
   verb: 'create',
   inputFields: `
-    name: String
+    name: String!
   `,
-  mutateAndGetPayload<Context>({ input }, { farmManager }) {
-    return farmManager.createFarm(input);
+  mutateAndGetPayload({ input }, context: Context) {
+    createContextFarmManager(context);
+    return context.farmManager.createFarm(input);
   }
 });
 
-const update = mutationDefinition<Context>({
+const update = mutationDefinition({
   modelName: name,
   verb: 'update',
   inputFields: `
     id: ID!
     name: String
   `,
-  mutateAndGetPayload<Context>({ input }, { farmManager }) {
-    return farmManager.updateFarm(input.id, input);
+  mutateAndGetPayload({ input }, context: Context) {
+    createContextFarmManager(context);
+    return context.farmManager.updateFarm(input.id, input);
   }
 });
 
-const remove = mutationDefinition<Context>({
+const remove = mutationDefinition({
   modelName: name,
   verb: 'remove',
   multiple: false,
   inputFields: `
     id: ID!
   `,
-  mutateAndGetPayload<Context>({ input }, { farmManager }) {
-    return farmManager.removeFarm(input.id);
+  mutateAndGetPayload({ input }, context: Context) {
+    createContextFarmManager(context);
+    return context.farmManager.removeFarm(input.id);
   }
 });
 
-const removes = mutationDefinition<Context>({
+const removes = mutationDefinition({
   modelName: name,
   verb: 'removeList',
   multiple: true,
   inputFields: `
     id: ID!
   `,
-  mutateAndGetPayload<Context>({ input }, { farmManager }) {
-    return farmManager.removeFarm(input.id);
+  mutateAndGetPayload({ input }, context: Context) {
+    createContextFarmManager(context);
+    return context.farmManager.removeFarm(input.id);
   }
 });
 
@@ -88,19 +97,20 @@ export const mutationDef = `
 `;
 
 export const resolver = {
-  types: {
-    Farm: {
-      birds(farm: Farm, args: ConnectionArguments, { birdManager }: Context) {
-        return paginate(args, pagination => birdManager.findBirdByFarm(farm.id, pagination));
-      }
+  Farm: {
+    birds(farm: Farm, args: ConnectionArguments, { birdManager }: Context) {
+      return paginate(args, pagination => birdManager.findBirdByFarm(farm.id, pagination), {
+        type: 'Farm'
+      });
     }
   },
-  query: {
-    farm(root: null, { id }: { id: FarmID }, { farmManager }: Context) {
-      return farmManager.getFarm(id);
+  Query: {
+    farm(root: null, { id }: { id: FarmID }, context: Context) {
+      createContextFarmManager(context);
+      throw new Error('not Implementation');
     }
   },
-  mutation: {
+  Mutation: {
     createFarm: create.resolver,
     updateFarm: update.resolver,
     removeFarm: remove.resolver,

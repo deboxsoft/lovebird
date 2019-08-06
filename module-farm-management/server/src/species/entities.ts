@@ -16,7 +16,7 @@ export class Species implements SpeciesInterface {
     }
   }
 
-  fromJson(json: SpeciesInput) {
+  fromJson(json: Partial<SpeciesInput>) {
     json.name && (this.name = json.name);
   }
 }

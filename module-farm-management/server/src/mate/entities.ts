@@ -1,7 +1,7 @@
 import nanoId from 'nanoid';
 import {
   Entity,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
   ManyToOne,
   OneToMany,
   RelationId,
@@ -9,18 +9,29 @@ import {
   Index,
   BeforeInsert
 } from '@deboxsoft/typeorm';
-import { BaseModel } from '@deboxsoft/typeorm/model/BaseModel';
-import { MateID, MateAttributes, MateInput, MateRecordAttributes, MateRecordInput } from './types';
-import { FarmID } from '../farm/types';
-import { Ring } from '../bird/types';
-import { Bird } from '../bird/entities';
-import { Farm } from '../farm/entities';
+import {
+  MateID,
+  MateAttributes,
+  MateInput,
+  MateRecordAttributes,
+  MateRecordInput,
+  FarmID,
+  Ring
+} from '@deboxsoft/lb-module-farm-management-types';
+import { BaseModel } from '../BaseModel';
+import { Bird } from '../bird';
+import { Farm } from '../farm';
 
 @Entity()
-@Index(['createAt', 'farmId'])
+@Index(['farm', 'createdAt'])
 export class Mate extends BaseModel {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn()
   id: MateID;
+
+  @BeforeInsert()
+  _generateId() {
+    this.id = nanoId();
+  }
 
   @ManyToOne(type => Bird, bird => bird.ring)
   male: Bird;
@@ -43,15 +54,18 @@ export class Mate extends BaseModel {
   @OneToMany(type => Bird, bird => bird.parent)
   childes: Bird[];
 
+  @OneToMany(type => MateRecord, mateRecord => mateRecord.mate)
+  records: MateRecord[];
+
   constructor(props?: MateAttributes) {
     super();
     if (props) {
       this.id = props.id;
-      this.updateFromJson(props);
+      this.fromJson(props);
     }
   }
 
-  updateFromJson(json?: MateInput) {
+  fromJson(json?: Partial<MateInput>) {
     if (json) {
       json.maleRing && (this.maleRing = json.maleRing);
       json.femaleRing && (this.femaleRing = json.femaleRing);
@@ -62,8 +76,13 @@ export class Mate extends BaseModel {
 
 @Entity()
 export class MateRecord extends BaseModel {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn()
   id: MateID;
+
+  @BeforeInsert()
+  _generateId() {
+    this.id = nanoId();
+  }
 
   @Column()
   message: string;
@@ -77,11 +96,6 @@ export class MateRecord extends BaseModel {
   @RelationId((mateRecord: MateRecord) => mateRecord.mate)
   mateId: MateID;
 
-  @BeforeInsert()
-  _generateId() {
-    this.id = nanoId();
-  }
-
   constructor(props: MateRecordAttributes) {
     super();
     if (props) {
@@ -89,7 +103,7 @@ export class MateRecord extends BaseModel {
     }
   }
 
-  fromJson(json: MateRecordInput) {
+  fromJson(json: Partial<MateRecordInput>) {
     json.message && (this.message = json.message);
     json.mateId && (this.mateId = json.mateId);
   }

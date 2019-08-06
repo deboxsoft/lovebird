@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "target": "esnext",
+    "declaration": true,
+    "declarationDir": "./build",
+    "moduleResolution": "node",
+    "strict": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "jsx": "preserve",
+    "strictPropertyInitialization": false,
+    "emitDeclarationOnly": true,
+    "paths": {}
+  },
+  "include": ["src"],
+  "exclude": ["**/__tests__", "**/__mocks__", "./node_modules"]
+}
