@@ -11,7 +11,6 @@
     "allowSyntheticDefaultImports": true,
     "jsx": "preserve",
     "strictPropertyInitialization": false,
-    "outDir": "libs",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,

@@ -20,8 +20,13 @@ type ConfigGraphql = {
   introspection?: boolean;
 };
 
-const typeDefs = gql`
+const schema = `
   ${pageInfoType}
+  input PaginationInput {
+    limit: number
+    next: ID
+    previous: ID
+  }
   ${TimeStampDefinition}
   ${ErrorTypeDef}
   ${farmManagementTypeDef}
@@ -44,7 +49,7 @@ export const createApolloServer = getConnection().then(connection => {
       ErrorResolver,
       farmManagementResolver
     ),
-    typeDefs,
+    typeDefs: gql(schema),
     introspection: configGraphql.introspection,
     context: {
       connection
