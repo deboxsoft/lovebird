@@ -1,0 +1,10 @@
+{
+  "presets": [
+    [
+      "@deboxsoft/babel/preset/react",
+      {
+        "absoluteRuntime": false
+      }
+    ]
+  ]
+}
