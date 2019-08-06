@@ -41,7 +41,14 @@
     "react-dom": "^16.8.6",
     "waait": "^1.0.5"
   },
-  "peerDependencies": {
-    "react-apollo-hooks": "^0.5.0"
+  "standard-version": {
+    "releaseCommitMessageFormat": "chore(release): lb-module-management-client:{{currentTag}}",
+    "scripts": {
+      "postbump": "npm publish"
+    },
+    "skip": {
+      "changelog": true,
+      "tag": true
+    }
   }
 }

@@ -1,13 +1,11 @@
 {
   "name": "@deboxsoft/lb-module-farm-management-server",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "module manajemen farm lovebird",
   "main": "libs",
-  "typings": "libs",
+  "types": "libs",
   "module": "libs",
-  "types": "",
   "scripts": {
-    "bump:patch": "npm run bump --patch",
     "lint": "npm run eslint --fix",
     "check": "npm run lint && tsc --noEmit",
     "clean": "rimraf libs",
@@ -31,7 +29,9 @@
   ],
   "author": "Nurdiansyah",
   "dependencies": {
+    "@deboxsoft/config": "^1.0.5",
     "@deboxsoft/graphql": "^0.0.29",
+    "@deboxsoft/lb-module-farm-management-types": "^1.0.0",
     "@deboxsoft/logger": "^1.0.1",
     "@deboxsoft/typeorm": "^0.2.21-beta.7",
     "@deboxsoft/user-model": "^0.0.1",
@@ -46,9 +46,7 @@
   },
   "devDependencies": {
     "@deboxsoft/babel": "^3.0.1",
-    "@deboxsoft/config": "^1.0.5",
     "@deboxsoft/eslint-config-devel": "^3.0.5",
-    "@deboxsoft/lb-module-farm-management-types": "^1.0.0",
     "@types/config": "^0.0.34",
     "@types/jest": "^24.0.15",
     "@types/node": "^10.14.14",
@@ -56,7 +54,14 @@
     "lint-staged": "^8.1.5",
     "sqlite3": "^4.0.6"
   },
-  "engines": {
-    "node": "^10.0.0"
+  "standard-version": {
+    "releaseCommitMessageFormat": "chore(release): lb-module-management-server:{{currentTag}}",
+    "scripts": {
+      "postbump": "npm publish"
+    },
+    "skip": {
+      "changelog": true,
+      "tag": true
+    }
   }
 }

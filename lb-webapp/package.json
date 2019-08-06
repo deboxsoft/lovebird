@@ -54,5 +54,13 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "standard-version": {
+    "postbump": "npm publish",
+    "skip": {
+      "changelog": true,
+      "commit": true,
+      "tag": true
+    }
+  }
 }

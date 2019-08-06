@@ -2,10 +2,22 @@
   "name": "@deboxsoft/lb-module-marketplace-server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "libs",
+  "types": "libs",
+  "module": "libs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "standard-version": {
+    "releaseCommitMessageFormat": "chore(release): lb-module-marketplace-server:{{currentTag}}",
+    "scripts": {
+      "postbump": "npm publish"
+    },
+    "skip": {
+      "changelog": true,
+      "tag": true
+    }
+  }
 }

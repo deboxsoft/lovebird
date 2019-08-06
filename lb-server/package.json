@@ -52,5 +52,13 @@
     "lodash.merge": "^4.6.1",
     "mariadb": "^2.0.3",
     "winston": "^3.2.1"
+  },
+  "standard-version": {
+    "postbump": "npm publish",
+    "skip": {
+      "changelog": true,
+      "commit": true,
+      "tag": true
+    }
   }
 }

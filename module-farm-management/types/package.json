@@ -2,7 +2,9 @@
   "name": "@deboxsoft/lb-module-farm-management-types",
   "version": "1.0.0",
   "description": "types typescript farm management.",
-  "main": "libs/index.js",
+  "main": "libs",
+  "module": "libs",
+  "types": "libs",
   "author": "Nurdiansyah",
   "scripts": {
     "build": "rimraf libs && npm run build:typings",
@@ -14,7 +16,16 @@
   },
   "devDependencies": {
     "@types/jest": "^24.0.15",
-    "@types/node": "^10.14.14",
-    "jest": "^24.7.1"
+    "@types/node": "^10.14.14"
+  },
+  "standard-version": {
+    "releaseCommitMessageFormat": "chore(release): lb-module-management-types:{{currentTag}}",
+    "scripts": {
+      "postbump": "npm publish"
+    },
+    "skip": {
+      "changelog": true,
+      "tag": true
+    }
   }
 }
