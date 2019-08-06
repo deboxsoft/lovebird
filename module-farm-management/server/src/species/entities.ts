@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column } from '@deboxsoft/typeorm';
-import { SpeciesAttributes, SpeciesID, SpeciesInput, SpeciesInterface } from './types';
+import { SpeciesAttributes, SpeciesID, SpeciesInput, SpeciesInterface } from '@deboxsoft/lb-module-farm-management-types';
 
 @Entity()
 export class Species implements SpeciesInterface {

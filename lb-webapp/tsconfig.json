@@ -17,7 +17,7 @@
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
     "paths": {
-      "*": ["../node_modules/@deboxsoft/component-webapp-react/__types/*"],
+      "*": ["./node_modules/@deboxsoft/component-webapp-react/__types/*"],
       "react/*": ["../node_modules/react/*"],
       "react-dom/*": ["../node_modules/react-dom/*"],
       "styled-components/*": [

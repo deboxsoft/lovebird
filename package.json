@@ -5,13 +5,8 @@
   "homepage": "https://github.com/deboxsoft/lovebird",
   "author": {
     "name": "Nurdiansyah",
-    "email": "nur.diansyah.ckt@gmail.com",
-    "url": ""
+    "email": "nur.diansyah.ckt@gmail.com"
   },
-  "files": [
-    "libs"
-  ],
-  "main": "libs/index.js",
   "keywords": [
     "lovebird",
     "react",
@@ -23,44 +18,30 @@
     "mobx"
   ],
   "devDependencies": {
-    "@babel/core": "^7.4.3",
     "@cnakazawa/watch": "1.0.3",
-    "@deboxsoft/babel": "^3.0.1",
-    "@deboxsoft/babel-preset-devel": "^2.0.7",
-    "@deboxsoft/devel": "^3.0.1",
-    "@deboxsoft/devel-react": "^3.0.0",
-    "@deboxsoft/devel-typescript": "^3.0.1",
-    "@deboxsoft/eslint-config-devel": "^1.0.11",
-    "@types/graphql": "^14.2.0",
-    "@types/node": "^10.0.0",
-    "@typescript-eslint/eslint-plugin": "^1.7.0",
-    "apollo-server-core": "^2.5.0-alpha.6",
-    "apollo-server-env": "^2.2.0",
-    "babel-plugin-module-resolver": "^3.2.0",
-    "graphql": "^14.2.1",
+    "@deboxsoft/eslint-config-devel": "^3.0.5",
+    "@types/graphql": "^14.2.2",
+    "@types/jest": "^24.0.15",
+    "@types/node": "^12.6.9",
+    "bump": "^0.2.5",
     "husky": "^1.3.1",
     "hygen": "^4.0.2",
     "jest": "^24.7.1",
     "lint-staged": "^8.1.5",
     "logform": "^2.1.2",
     "prettier": "^1.14.3",
+    "rimraf": "^2.6.3",
     "semantic-release": "^15.13.18",
     "standard-version": "^6.0.1",
     "stylelint": "^9.10.1",
     "stylelint-config-recommended": "^2.1.0",
     "stylelint-config-styled-components": "^0.1.1",
     "stylelint-processor-styled-components": "^1.5.2",
-    "typescript": "~3.3.0"
+    "typescript": "~3.5.2"
   },
   "engines": {
     "npm": ">= 4.0.0"
   },
   "private": true,
-  "repository": "https://github.com/deboxsoft/lovebird.git",
-  "scripts": {
-    "test": "jest"
-  },
-  "jest": {
-    "testEnvironment": "node"
-  }
+  "repository": "https://github.com/deboxsoft/lovebird.git"
 }

@@ -1,4 +1,7 @@
 packages:
-  - 'module-*/**'
-  - 'lb-*'
+  - 'module-farm-management/server'
+  - 'module-farm-management/client'
+  - 'module-farm-management/types'
+  - 'lb-webapp'
+  - 'lb-server'
   - './'

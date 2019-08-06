@@ -1,10 +1,5 @@
 {
   "compilerOptions": {
-    "paths": {
-      "*": [
-        "types/*"
-      ]
-    },
     "baseUrl": "./src",
     "target": "es5",
     "module": "commonjs",
@@ -23,6 +18,12 @@
     "downlevelIteration": true,
     "outDir": "libs",
     "lib": ["es6", "es7"]
+  },
+  "paths": {
+    "*": [
+      "types/*"
+    ],
+    "apollo-server-core": ["node_modules/apollo-server-core"]
   },
   "include": [
     "src"

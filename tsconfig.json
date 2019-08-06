@@ -16,11 +16,9 @@
     "stripInternal": true,
     "noUnusedLocals": true,
     "downlevelIteration": true,
-    "outDir": "libs",
-    "lib": ["es6", "es7", "dom"]
+    "lib": ["es6", "es7", "dom"],
+    "baseUrl": "./src"
   },
-  "include": [
-    "src"
-  ],
+  "include": [],
   "exclude": []
 }

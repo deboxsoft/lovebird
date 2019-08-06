@@ -3,7 +3,7 @@
     "baseUrl": "./",
     "target": "esnext",
     "declaration": true,
-    "declarationDir": "./build",
+    "declarationDir": "./libs",
     "moduleResolution": "node",
     "strict": true,
     "esModuleInterop": true,
