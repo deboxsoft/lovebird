@@ -1,22 +1,22 @@
 {
   "name": "@deboxsoft/lb-module-farm-management-types",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "description": "types typescript farm management.",
   "main": "libs",
   "module": "libs",
   "types": "libs",
   "author": "Nurdiansyah",
   "scripts": {
-    "build": "rimraf libs && npm run build:typings",
+    "build": "rimraf libs && npm run build:devel",
+    "build:devel": "npm run build:es && npm run build:typings",
+    "build:es": "rimraf 'libs/!(**/*.d.ts)' && cross-env BABEL_ENV=production babel -x '.ts','.tsx' --ignore '**/__tests__/**' -d './libs' './src'",
     "build:typings": "rimraf 'libs/**/*.d.ts' && tsc -p tsconfig.json",
     "check": "npm run lint && tsc --noEmit",
     "lint": "eslint --fix",
     "prepublishOnly": "npm run build",
-    "test": "cross-env NODE_ENV=test jest src"
-  },
-  "devDependencies": {
-    "@types/jest": "^24.0.15",
-    "@types/node": "^10.14.14"
+    "release": "standard-version",
+    "test": "cross-env NODE_ENV=test jest src",
+    "babel": "babel"
   },
   "standard-version": {
     "releaseCommitMessageFormat": "chore(release): lb-module-management-types:{{currentTag}}",
