@@ -13,6 +13,7 @@
     "build:typings": "tsc -p tsconfig.typings.json",
     "build:dev": "npm run clean && tsc --watch",
     "prepublishOnly": "npm run build",
+    "release": "standard-version",
     "test": "cross-env NODE_ENV=test jest src",
     "test:watch": "npm run test --watch",
     "test:coverage": "npm run test --coverage",
@@ -31,7 +32,7 @@
   "dependencies": {
     "@deboxsoft/config": "^1.0.5",
     "@deboxsoft/graphql": "^0.0.29",
-    "@deboxsoft/lb-module-farm-management-types": "^1.0.0",
+    "@deboxsoft/lb-module-farm-management-types": "^0.0.1",
     "@deboxsoft/logger": "^1.0.1",
     "@deboxsoft/typeorm": "^0.2.21-beta.7",
     "@deboxsoft/user-model": "^0.0.1",
@@ -45,12 +46,7 @@
     "nanoid": "^2.0.1"
   },
   "devDependencies": {
-    "@deboxsoft/babel": "^3.0.1",
-    "@deboxsoft/eslint-config-devel": "^3.0.5",
     "@types/config": "^0.0.34",
-    "@types/jest": "^24.0.15",
-    "@types/node": "^10.14.14",
-    "jest": "^24.7.1",
     "lint-staged": "^8.1.5",
     "sqlite3": "^4.0.6"
   },
