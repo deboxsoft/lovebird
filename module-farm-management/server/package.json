@@ -1,6 +1,6 @@
 {
   "name": "@deboxsoft/lb-module-farm-management-server",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "module manajemen farm lovebird",
   "main": "libs",
   "types": "libs",
@@ -21,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "http://github.com"
+    "url": "http://github.com/deboxsoft/lovebird"
   },
   "keywords": [
     "graphql",
