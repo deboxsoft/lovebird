@@ -1,19 +1,7 @@
 {
+  "extends": "../../tsconfig",
   "compilerOptions": {
-    "baseUrl": "./",
-    "target": "esnext",
-    "declaration": true,
-    "declarationDir": "./libs",
-    "moduleResolution": "node",
-    "strict": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "jsx": "preserve",
-    "strictPropertyInitialization": false,
-    "skipLibCheck": true,
-    "emitDeclarationOnly": true,
-    "paths": {}
+    "declarationDir": "libs"
   },
-  "include": ["src"],
-  "exclude": ["**/__tests__", "**/__mocks__"]
+  "include": ["src"]
 }
