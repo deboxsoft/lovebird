@@ -1,7 +1,8 @@
 {
-  "extends": "../../tsconfig",
+  "extends": "../../tsconfig.server",
   "compilerOptions": {
-    "declarationDir": "libs"
+    "declarationDir": "libs",
+    "baseUrl": "./src"
   },
   "include": ["src"]
 }

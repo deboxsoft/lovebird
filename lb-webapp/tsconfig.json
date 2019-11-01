@@ -24,6 +24,7 @@
     }
   },
   "include": [
+    "typings/**/*.d.ts",
     "src"
   ]
 }
