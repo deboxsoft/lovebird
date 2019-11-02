@@ -1,5 +1,5 @@
 {
   "presets": [
-    "@deboxsoft/babel", "@deboxsoft/babel/preset/typescript"
+    "@deboxsoft/babel/preset", "@deboxsoft/babel/preset/typescript"
   ]
 }

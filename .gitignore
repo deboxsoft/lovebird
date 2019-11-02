@@ -199,3 +199,8 @@ build
 .graphqlconfig
 schema.graphql
 dist
+
+#env
+*.local
+.pnpm-store
+.npmrc

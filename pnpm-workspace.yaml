@@ -1,7 +1,5 @@
 packages:
-  - 'module-farm-management/server'
-  - 'module-farm-management/client'
-  - 'module-farm-management/types'
+  - 'module-farm-management/*'
   - 'lb-webapp'
   - 'lb-server'
   - './'

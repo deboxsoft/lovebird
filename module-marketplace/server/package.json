@@ -1,12 +1,19 @@
 {
   "name": "@deboxsoft/lb-module-marketplace-server",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
   "main": "libs",
   "types": "libs",
   "module": "libs",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "rimraf libs && npm run build:devel",
+    "build:devel": "rimraf 'libs/*' && tsc -p tsconfig.json",
+    "check": "npm run lint && tsc --noEmit",
+    "lint": "eslint --fix",
+    "prepublishOnly": "npm run build",
+    "release": "standard-version",
+    "test": "cross-env NODE_ENV=test jest src",
+    "typeorm": "ts-node ./node_modules/@deboxsoft/typeorm/cli.js"
   },
   "author": "",
   "license": "ISC",

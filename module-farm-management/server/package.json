@@ -1,23 +1,21 @@
 {
   "name": "@deboxsoft/lb-module-farm-management-server",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "module manajemen farm lovebird",
   "main": "libs",
   "types": "libs",
   "module": "libs",
+  "files": [
+    "libs"
+  ],
   "scripts": {
-    "lint": "npm run eslint --fix",
+    "build": "rimraf libs && npm run build:devel",
+    "build:devel": "rimraf 'libs/*' && tsc -p tsconfig.json",
     "check": "npm run lint && tsc --noEmit",
-    "clean": "rimraf libs",
-    "build": "npm run clean && tsc",
-    "build:typings": "tsc -p tsconfig.typings.json",
-    "build:dev": "npm run clean && tsc --watch",
+    "lint": "eslint --fix",
     "prepublishOnly": "npm run build",
     "release": "standard-version",
-    "test": "cross-env NODE_ENV=test jest src",
-    "test:watch": "npm run test --watch",
-    "test:coverage": "npm run test --coverage",
-    "typeorm": "ts-node ./node_modules/@deboxsoft/typeorm/cli.js"
+    "test": "cross-env NODE_ENV=test jest src"
   },
   "repository": {
     "type": "git",
@@ -31,23 +29,21 @@
   "author": "Nurdiansyah",
   "dependencies": {
     "@deboxsoft/config": "^1.0.5",
-    "@deboxsoft/graphql": "^0.0.29",
-    "@deboxsoft/lb-module-farm-management-types": "^0.0.1",
+    "@deboxsoft/graphql": "^0.0.31",
+    "@deboxsoft/lb-module-farm-management-types": "workspace:*",
     "@deboxsoft/logger": "^1.0.1",
     "@deboxsoft/typeorm": "^0.2.21-beta.7",
-    "@deboxsoft/user-model": "^0.0.1",
+    "@deboxsoft/account-api": "~0.1.0",
     "config": "^3.1.0",
     "dataloader": "^1.4.0",
     "fast-memoize": "^2.5.1",
     "lodash": "^4.17.15",
-    "lodash.merge": "^4.6.1",
     "mariadb": "^2.0.3",
     "moment": "^2.24.0",
     "nanoid": "^2.0.1"
   },
   "devDependencies": {
-    "@types/config": "^0.0.34",
-    "lint-staged": "^8.1.5",
+    "@types/lodash": "^4.14.138",
     "sqlite3": "^4.0.6"
   },
   "standard-version": {

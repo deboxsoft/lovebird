@@ -5,18 +5,18 @@
   "main": "libs",
   "module": "libs",
   "types": "libs",
+  "files": ["libs"],
   "author": "Nurdiansyah",
   "scripts": {
     "build": "rimraf libs && npm run build:devel",
     "build:devel": "npm run build:es && npm run build:typings",
-    "build:es": "rimraf 'libs/!(**/*.d.ts)' && cross-env BABEL_ENV=production babel -x '.ts','.tsx' --ignore '**/__tests__/**' -d './libs' './src'",
+    "build:es": "rimraf 'libs/!(**/*.d.ts)' && cross-env BABEL_ENV=production babel -x '.ts','.tsx' --ignore '**/__tests__/**','**/__mocks__/**' -d './libs' './src'",
     "build:typings": "rimraf 'libs/**/*.d.ts' && tsc -p tsconfig.json",
     "check": "npm run lint && tsc --noEmit",
     "lint": "eslint --fix",
     "prepublishOnly": "npm run build",
     "release": "standard-version",
-    "test": "cross-env NODE_ENV=test jest src",
-    "babel": "babel"
+    "test": "cross-env NODE_ENV=test jest src"
   },
   "standard-version": {
     "releaseCommitMessageFormat": "chore(release): lb-module-management-types:{{currentTag}}",
