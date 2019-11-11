@@ -4,7 +4,19 @@ import { MateID } from './mate';
 
 export type Ring = string;
 export type BirdRecordID = string;
-export type Gender = 'male' | 'female' | 'unsex';
+export type Gender = 'MALE' | 'FEMALE' | 'UNSEX';
+export const GENDER: Record<Gender, Gender> = {
+  UNSEX: 'UNSEX',
+  FEMALE: 'FEMALE',
+  MALE: 'MALE'
+};
+export type BirdStatus = 'REGISTERED' | 'VERIFIED' | 'SOLD' | 'DIED';
+export const BIRD_STATUS: Record<BirdStatus, BirdStatus> = {
+  REGISTERED: 'REGISTERED',
+  DIED: 'DIED',
+  SOLD: 'SOLD',
+  VERIFIED: 'VERIFIED'
+}
 export interface BirdInput {
   name?: string;
   gender: Gender;
@@ -15,6 +27,7 @@ export interface BirdInput {
   speciesId?: SpeciesID;
   parentId?: MateID;
   farmId: FarmID;
+  status: BirdStatus;
 }
 
 export interface RegisterBirdInput extends BirdInput {
@@ -24,11 +37,6 @@ export interface RegisterBirdInput extends BirdInput {
 export interface BirdAttributes extends RegisterBirdInput {
   photo?: string[];
 }
-
-export const BirdFilterInputDef = `
-  speciesId: ID
-  farmId: ID
-`;
 
 export interface BirdFilterInput {
   speciesId?: SpeciesID;
