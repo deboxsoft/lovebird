@@ -1,5 +1,5 @@
 {
-  "extends": ["@deboxsoft/devel/typescript"],
+  "extends": ["@deboxsoft/devel/typescript-react"],
   "rules": {
     "@typescript-eslint/no-non-null-assertion": 0,
     "no-use-before-define": 0,

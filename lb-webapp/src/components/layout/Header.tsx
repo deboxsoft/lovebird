@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import styled from 'styled-components/macro';
 import { Navbar, Container, Nav, NavbarLink, Button } from '@deboxsoft/component-webapp-react';
 import { SizeKey } from '@deboxsoft/component-webapp-react/utils/types';
 
@@ -20,7 +19,14 @@ export const Header = ({ expand }: Props) => {
             Lovebird
           </NavbarLink>
           <Nav type="end">
-            <Button outline themeType="dark" expandScreen={expand} toggleCollapse onClick={onToggleEvent}>
+            <Button
+              type="button"
+              outline
+              themeType="default"
+              expandScreen={expand}
+              toggleCollapse
+              onClick={onToggleEvent}
+            >
               <span>&#9776;</span>
             </Button>
           </Nav>

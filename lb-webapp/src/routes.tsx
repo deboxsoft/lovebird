@@ -1,7 +1,7 @@
 import React from 'react';
-import { mount, route } from 'navi';
+import { mount, route, lazy, Matcher } from 'navi';
 
-export const routes = mount({
+export const routes: Matcher<{}> = mount({
   '/': route({
     title: 'home',
     view: () => (
@@ -10,10 +10,5 @@ export const routes = mount({
       </>
     )
   }),
-  '/breeding': route({
-    title: 'breeding',
-    getView: request => {
-      return <div>breeding {request.url}</div>;
-    }
-  })
+  '/farm': lazy(() => import('modules/farm-management/route'))
 });

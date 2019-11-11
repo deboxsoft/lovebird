@@ -5,6 +5,16 @@ import { listTheme } from './list';
 import { linkTheme } from './link';
 import { iconTheme } from './icon';
 import {
+  cardTheme,
+  cardBodyTheme,
+  cardFooterTheme,
+  cardHeaderTheme,
+  cardImageTheme,
+  cardTextTheme,
+  cardTitleTheme
+} from './card';
+
+import {
   formCheckTheme,
   formCheckInputTheme,
   formControlTheme,
@@ -33,8 +43,26 @@ const bodyTheme: BodyTheme = {
 export const defaultTheme: Theme = {
   container: containerTheme,
   button: buttonTheme,
+  card: cardTheme,
+  cardBody: cardBodyTheme,
+  cardHeader: cardHeaderTheme,
+  cardFooter: cardFooterTheme,
+  cardImage: cardImageTheme,
+  cardTitle: cardTitleTheme,
   navLink: navLinkTheme,
   nav: navTheme,
   navbar: navbarTheme,
-  navbarLink: navbarLinkTheme
+  navbarLink: navbarLinkTheme,
+  formCheck: formCheckTheme,
+  formCheckInput: formCheckInputTheme,
+  formControl: formControlTheme,
+  formControlPlainText: formControlPlainTextTheme,
+  formControlFile: formControlFileTheme,
+  formGroup: formGroupTheme,
+  formText: formTextTheme,
+  formInline: formInlineTheme,
+  inputGroup: inputGroupTheme,
+  inputGroupText: inputGroupTextTheme,
+  inputGroupAppend: inputGroupAppendTheme,
+  inputGroupPrepend: inputGroupPrependTheme
 };

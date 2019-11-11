@@ -1,5 +1,5 @@
 import { createGlobalStyle } from 'styled-components/macro';
-import { defaultTheme } from '@deboxsoft/component-webapp-react/theme/default';
+import { defaultTheme } from './default';
 
 export const ResetStyled = createGlobalStyle`
    *,

@@ -11,13 +11,15 @@ const SideMenuStyled = styled.aside`
   transition: all 0.3s ease;
   border-right: 1px solid #e1e4e8;
 `;
-window.document.documentElement.clientHeight
 export const SideMenu = ({  }: SideMenuProps) => (
   <SideMenuStyled>
     <Container fluid>
       <Nav type="vertical">
         <NavLink href="/">Home</NavLink>
-        <NavLink href="/breeding">Breeding</NavLink>
+        <NavLink href="/farm">Breeding</NavLink>
+        <Nav type="vertical">
+          <NavLink href="/farm/register-bird">register Burung</NavLink>
+        </Nav>
       </Nav>
     </Container>
   </SideMenuStyled>

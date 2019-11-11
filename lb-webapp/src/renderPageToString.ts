@@ -2,7 +2,7 @@ import { createMemoryNavigation } from 'navi';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { Helmet } from 'react-helmet';
-import { NavigationProvider, View } from '@deboxsoft/component-webapp-react';
+import { NaviProvider, View } from 'react-navi';
 
 async function renderCreateReactAppTemplate({ config, replaceTitleWith, insertIntoRootDiv }) {
   let html = (await config.fs.readFile(config.entry)).toString('utf8');
@@ -47,7 +47,7 @@ async function renderPageToString({ config, exports, routes, dependencies, url }
   // Render the content
   const bodyHTML = ReactDOMServer.renderToString(
     sheet.collectStyles(
-      React.createElement(NavigationProvider, { navigation }, React.createElement(exports.App || View))
+      React.createElement(NaviProvider, { navigation }, React.createElement(exports.App || View))
     )
   );
 

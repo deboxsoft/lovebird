@@ -7,7 +7,7 @@ export const containerTheme: ContainerTheme = {
   width: '100%',
   font: {
     size: {},
-    family: {}
+    family: ''
   },
   colors: {}
 };

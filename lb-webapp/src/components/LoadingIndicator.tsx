@@ -35,7 +35,7 @@ export const LoadingIndicator = styled.div<Props>`
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) inset;
   transform: translateY(-4px);
   transition: transform ease-in 300ms, opacity ease-in 300ms;
-  transition-delay: 0;
+  transition-delay: 0s;
   animation: ${animation} 2s cubic-bezier(0.4, 0.45, 0.6, 0.55) infinite;
   opacity: 0;
   ${({ active }) =>

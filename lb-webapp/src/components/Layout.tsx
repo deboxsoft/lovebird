@@ -1,13 +1,8 @@
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components/macro';
-import {
-  Navbar,
-  NavbarLink,
-  Container,
-  Nav,
-  Button,
-  NotFoundBoundary
-} from '@deboxsoft/component-webapp-react';
+import { NotFoundBoundary } from 'react-navi';
+
+import { Navbar, NavbarLink, Container, Nav, Button } from '@deboxsoft/component-webapp-react';
 import { SizeKey } from '@deboxsoft/component-webapp-react/utils/types';
 import { LoadingIndicator } from './LoadingIndicator';
 import { Header } from './layout/Header';
@@ -25,6 +20,7 @@ const Main = styled.main`
 
 const Content = styled.div`
   padding: 10px;
+  width: 100%;
 `;
 
 export const Layout = ({ children, loading }: Props) => {
