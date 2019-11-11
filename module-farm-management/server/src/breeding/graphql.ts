@@ -110,7 +110,7 @@ export const mutationDef = `
   ${removes.mutationDef}
 `;
 
-export const resolver = {
+export const resolver: object = {
   Breeding: {
     records(breeding: Breeding, args: ConnectionArguments, context: Context) {
       return paginate(args, pagination => context.breedingManager.getRecord(breeding.id, pagination), {

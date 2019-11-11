@@ -15,6 +15,7 @@ export class BirdManager {
   private speciesRepo: SpeciesRepo;
 
   constructor({ connection }: { connection: Connection }) {
+    const birdRepoTest = connection.getRepository(Bird);
     this.birdRepo = connection.getCustomRepository(BirdRepo);
     this.speciesRepo = connection.getCustomRepository(SpeciesRepo);
   }

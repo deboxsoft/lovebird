@@ -23,9 +23,10 @@ export class BirdRepo extends AbstractRepository<Bird> {
 
   async create(input: BirdInput & { ring: Ring }): Promise<Bird> {
     const bird = new Bird(input);
-    return await this.repository.save(bird).catch(reason => {
+    await this.repository.insert(bird).catch(reason => {
       throw new CreateEntityFailed('Bird', reason);
     });
+    return bird;
   }
 
   async update(ring: Ring, input: BirdInput): Promise<Bird> {
@@ -52,7 +53,7 @@ export class BirdRepo extends AbstractRepository<Bird> {
     if (pagination) {
       paginationSelectQueryBuilder(queryBuilder, pagination, { idName: 'ring' });
     }
-    Object.entries(filter).forEach(([key, val], index) => {
+    Object.entries(filter).forEach(([key, val]) => {
       if (val) {
         if (queryBuilder.expressionMap.wheres.length === 0) {
           queryBuilder.where(`${key} = :${key}`, { [key]: val });
@@ -176,7 +177,7 @@ export class BirdRepo extends AbstractRepository<Bird> {
 
   async addPhoto(ring: Ring, photo: string): Promise<Bird> {
     const bird = await this.findByRing(ring);
-    bird.photo.push('photo');
+    bird.photo.push(photo);
     return this.repository.save(bird);
   }
 }

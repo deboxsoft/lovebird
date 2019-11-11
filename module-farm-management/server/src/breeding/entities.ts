@@ -35,13 +35,13 @@ export class Breeding extends BaseModel {
   @Column()
   name: string;
 
-  @ManyToOne(type => Farm)
+  @ManyToOne(() => Farm)
   farm: Farm;
 
   @RelationId((breeding: Breeding) => breeding.farm)
   farmId: FarmID;
 
-  @OneToMany(type => BreedingRecord, breedingRecord => breedingRecord.breeding)
+  @OneToMany(() => BreedingRecord, breedingRecord => breedingRecord.breeding)
   records: BreedingRecord[];
 
   constructor(props?: BreedingAttributes) {
@@ -74,7 +74,7 @@ export class BreedingRecord extends BaseModel {
   @Column('datetime')
   timeRecord: number;
 
-  @ManyToOne(type => Breeding, breeding => breeding.records)
+  @ManyToOne(() => Breeding, breeding => breeding.records)
   breeding: Breeding;
 
   @RelationId((breedingRecord: BreedingRecord) => breedingRecord.breeding)

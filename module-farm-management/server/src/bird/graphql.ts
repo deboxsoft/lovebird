@@ -7,12 +7,7 @@ import {
   paginate,
   Pagination
 } from '@deboxsoft/graphql';
-import {
-  BirdRecordInput,
-  Ring,
-  BirdFilterInput,
-  BirdFilterInputDef
-} from '@deboxsoft/lb-module-farm-management-types';
+import { BirdRecordInput, Ring, BirdFilterInput } from '@deboxsoft/lb-module-farm-management-types';
 import { Context } from '../__definition';
 import { Bird } from './entities';
 import { BirdManager } from '../BirdManager';
@@ -31,6 +26,7 @@ const register = mutationDefinition({
     birth: TimeStamp
     colorMutation: String
     farmId: ID!
+    gender: Gender
     name: String
     parentId: ID
     ring: Ring!
@@ -139,10 +135,6 @@ export const typeDef = `
     createdAt: TimeStamp
   }
   
-  input BirdFilterInput {
-    ${BirdFilterInputDef}
-  }
-  
   ${BirdConnection}
   ${BirdRecordConnection}
   ${register.typeDef}
@@ -154,7 +146,7 @@ export const typeDef = `
 
 export const queryDef = `
   checkRing(ring: Ring!): Bird
-  findBird(filter: BirdFilterInput, pagination: PaginationInput): [Bird]
+  findBird(farmId: ID, pagination: PaginationInput): [Bird]
   birdRecord(ring: Ring!): [BirdRecord]
 `;
 
@@ -166,7 +158,7 @@ export const mutationDef = `
   ${createBirdRecord.mutationDef}
 `;
 
-export const resolver = {
+export const resolver: object = {
   Ring() {
     new GraphQLScalarType({
       name: 'Ring',
@@ -181,7 +173,7 @@ export const resolver = {
 
   Bird: {
     records(bird: Bird, args: ConnectionArguments, context: Context) {
-      return paginate(args, pagination => context.birdManager.getRecord(bird.ring), {
+      return paginate(args, pagination => context.birdManager.getRecord(bird.ring, pagination), {
         idName: 'ring',
         type: 'Bird'
       });
@@ -201,7 +193,9 @@ export const resolver = {
 
     birdRecord(root: null, args: { ring: Ring } & ConnectionArguments, context: Context) {
       createContextBirdManager(context);
-      return paginate(args, pagination => context.birdManager.getRecord(args.ring), { type: 'BirdRecord' });
+      return paginate(args, pagination => context.birdManager.getRecord(args.ring, pagination), {
+        type: 'BirdRecord'
+      });
     }
   },
 

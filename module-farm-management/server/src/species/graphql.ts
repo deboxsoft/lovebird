@@ -95,7 +95,7 @@ export const mutationDef = `
   ${removes.mutationDef}
 `;
 
-export const resolver = {
+export const resolver: object = {
   Species: {
     birds(species: SpeciesInterface, args: ConnectionArguments, context: Context) {
       return paginate(args, pagination => context.birdManager.findBirdBySpecies(species.id, pagination), {

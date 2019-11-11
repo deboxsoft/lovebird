@@ -33,28 +33,28 @@ export class Mate extends BaseModel {
     this.id = nanoId();
   }
 
-  @ManyToOne(type => Bird, bird => bird.ring)
+  @ManyToOne(() => Bird, bird => bird.ring)
   male: Bird;
 
   @RelationId((mate: Mate) => mate.male)
   maleRing: Ring;
 
-  @ManyToOne(type => Bird, bird => bird.ring)
+  @ManyToOne(() => Bird, bird => bird.ring)
   female: Bird;
 
   @RelationId((mate: Mate) => mate.female)
   femaleRing: Ring;
 
-  @ManyToOne(type => Farm, farm => farm.id)
+  @ManyToOne(() => Farm, farm => farm.id)
   farm: Farm;
 
   @RelationId((mate: Mate) => mate.farm)
   farmId: FarmID;
 
-  @OneToMany(type => Bird, bird => bird.parent)
+  @OneToMany(() => Bird, bird => bird.parent)
   childes: Bird[];
 
-  @OneToMany(type => MateRecord, mateRecord => mateRecord.mate)
+  @OneToMany(() => MateRecord, mateRecord => mateRecord.mate)
   records: MateRecord[];
 
   constructor(props?: MateAttributes) {
@@ -90,7 +90,7 @@ export class MateRecord extends BaseModel {
   @Column()
   timeRecord: number;
 
-  @ManyToOne(type => Mate)
+  @ManyToOne(() => Mate)
   mate: Mate;
 
   @RelationId((mateRecord: MateRecord) => mateRecord.mate)

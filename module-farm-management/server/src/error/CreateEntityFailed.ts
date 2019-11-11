@@ -1,8 +1,8 @@
 export class CreateEntityFailed extends Error {
-  reason: string;
+  code?: string;
 
-  public constructor(entityName: string, reason?: string) {
+  public constructor(entityName: string, code?: string) {
     super(`Penambahan data '${entityName}' tidak berhasil.`);
-    reason && (this.reason = reason);
+    this.code = code;
   }
 }

@@ -12,6 +12,7 @@ import {
 import {
   Ring,
   Gender,
+  GENDER,
   BirdAttributes,
   BirdInput,
   BirdRecordID,
@@ -19,7 +20,9 @@ import {
   BirdRecordAttributes,
   FarmID,
   MateID,
-  SpeciesID
+  SpeciesID,
+  BIRD_STATUS,
+  BirdStatus
 } from '@deboxsoft/lb-module-farm-management-types';
 import moment from 'moment';
 import { BaseModel } from '../BaseModel';
@@ -27,55 +30,61 @@ import { Species } from '../species';
 import { Farm } from '../farm';
 import { Mate } from '../mate';
 
+const birdStatusEnum = Object.keys(BIRD_STATUS);
+const genderEnum = Object.keys(GENDER);
+
 @Entity()
 @Index(['createdAt'])
-export class Bird extends BaseModel {
+export class Bird extends BaseModel implements BirdAttributes {
   @PrimaryColumn()
   ring: Ring;
 
-  @Column()
-  name: string;
+  @Column({ nullable: true })
+  name?: string;
 
-  @Column('enum', { enum: ['male', 'female', 'unsex'] })
+  @Column('enum', { enum: genderEnum })
   gender: Gender;
 
-  @Column()
-  birth: number;
+  @Column('timestamp', { nullable: true })
+  birth?: number;
 
-  @Column()
-  colorMutation: string;
+  @Column({ nullable: true })
+  colorMutation?: string;
 
   @Column('simple-json', { nullable: true, default: '[]' })
   photo: string[];
 
-  @ManyToOne(type => Farm)
-  birthByFarm: Farm;
+  @ManyToOne(() => Farm)
+  birthByFarm?: Farm;
 
   @RelationId((bird: Bird) => {
     return bird.birthByFarm;
   })
-  birthByFarmId: FarmID;
+  birthByFarmId?: FarmID;
 
-  @ManyToOne(type => Species)
+  @ManyToOne(() => Species)
   species: Species;
 
   @RelationId((bird: Bird) => bird.species)
-  speciesId: SpeciesID;
+  speciesId?: SpeciesID;
 
-  @ManyToOne(type => Mate, mate => mate.childes)
+  @ManyToOne(() => Mate, mate => mate.childes)
   parent: Mate;
 
   @RelationId((bird: Bird) => bird.parent)
-  parentId: MateID;
+  parentId?: MateID;
 
-  @ManyToOne(farm => Farm, farm => farm.birds)
+  @ManyToOne(() => Farm, farm => farm.birds)
   farm: Farm;
 
   @RelationId((bird: Bird) => bird.farm)
   farmId: FarmID;
 
-  @OneToMany(type => BirdRecord, birdRecord => birdRecord.bird)
+  @OneToMany(() => BirdRecord, birdRecord => birdRecord.bird)
   records: BirdRecord[];
+
+  @Column('enum', { enum: birdStatusEnum })
+  status: BirdStatus;
 
   constructor(props?: BirdAttributes) {
     super();
@@ -129,7 +138,7 @@ export class BirdRecord extends BaseModel {
   @Column('datetime')
   timeRecord: number;
 
-  @ManyToOne(type => Bird)
+  @ManyToOne(() => Bird)
   bird: Bird;
 
   @RelationId((birdRecord: BirdRecord) => birdRecord.bird)

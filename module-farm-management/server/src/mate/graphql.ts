@@ -117,7 +117,7 @@ export const mutationDef = `
   ${removes.mutationDef}
 `;
 
-export const resolver = {
+export const resolver: object = {
   Mate: {
     chills(mate: Mate, args: ConnectionArguments, context: Context) {
       return paginate(args, pagination => context.birdManager.findBirdByMate(mate.id, pagination), {

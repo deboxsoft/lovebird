@@ -23,9 +23,10 @@ describe('BirdRepo', () => {
         birthByFarmId: 'farm1',
         birth: moment().unix(),
         farmId: 'farm',
-        gender: 'unsex',
+        gender: 'UNSEX',
         parentId: 'parent',
-        speciesId: 1
+        speciesId: 1,
+        status: 'VERIFIED'
       });
     expect(bird.ring).toBe('ring1');
   });
@@ -36,7 +37,7 @@ describe('BirdRepo', () => {
 
     if (!bird) throw new Error('error');
     bird.age = 1;
-    const _bird = await birdRepo.save(bird);
+    const _bird = await birdRepo.update(bird.ring, bird);
     expect(_bird.age).toBe(_bird.age);
     expect(_bird.birth).not.toEqual(bird.birth);
     expect(bird).toEqual(_bird);

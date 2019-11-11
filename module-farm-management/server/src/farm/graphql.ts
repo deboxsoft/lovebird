@@ -74,6 +74,7 @@ const FarmConnection = connectionDefinitions({
 
 export const typeDef = `
   type Farm {
+    id: ID
     name: String
     birds${connectionArgs()}: BirdConnection
   }
@@ -96,7 +97,7 @@ export const mutationDef = `
   ${removes.mutationDef}
 `;
 
-export const resolver = {
+export const resolver: object = {
   Farm: {
     birds(farm: Farm, args: ConnectionArguments, { birdManager }: Context) {
       return paginate(args, pagination => birdManager.findBirdByFarm(farm.id, pagination), {

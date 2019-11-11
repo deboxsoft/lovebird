@@ -18,8 +18,13 @@ export class Farm extends BaseModel {
   @Column()
   name: string;
 
-  @OneToMany(type => Bird, bird => bird.farm)
-  birds: Bird[];
+  constructor(props?: FarmAttributes) {
+    super();
+    if (props) {
+      this.id = props.id;
+      this.fromJson(props);
+    }
+  }
 
   constructor(props?: FarmAttributes) {
     super();
