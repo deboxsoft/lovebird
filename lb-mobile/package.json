@@ -1,0 +1,31 @@
+{
+  "name": "@deboxsoft/lb-mobile",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "android": "react-native run-android --port 9091",
+    "android:debug": "cd ./android && ./gradlew app:assembleDebug && ./gradlew installDebug",
+    "ios": "react-native run-ios --port 9091",
+    "start": "react-native start --port 9091",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@deboxsoft/react-native": "0.0.3",
+    "@eva-design/eva": "^1.2.0",
+    "react": "^16.11.0",
+    "react-native": "^0.60.0",
+    "react-native-ui-kitten": "^4.2.0",
+    "remx": "^2.0.59"
+  },
+  "devDependencies": {
+    "@react-native-community/cli": "^2.9.0",
+    "@types/react": "^16.9.11",
+    "@types/react-native": "^0.60.22",
+    "jest-worker": "^24.9.0",
+    "metro": "^0.57.0",
+    "metro-react-native-babel-preset": "^0.51.1"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}

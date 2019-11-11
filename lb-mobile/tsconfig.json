@@ -1,0 +1,4 @@
+{
+  "extends": "../tsconfig.rn",
+  "exclude": ["./node_modules"]
+}
