@@ -13,7 +13,7 @@
     "@deboxsoft/react-native": "0.0.3",
     "@eva-design/eva": "^1.2.0",
     "react": "^16.11.0",
-    "react-native": "^0.60.0",
+    "react-native": "^0.62.3",
     "react-native-ui-kitten": "^4.2.0",
     "remx": "^2.0.59"
   },
